@@ -1,0 +1,11 @@
+[project]
+name = "ai-test-agent"
+version = "0.1.0"
+description = "LLM-driven e2e test agent against a real open-source app (Halo): planner -> executor -> judge -> report"
+requires-python = ">=3.12"
+dependencies = [
+    "playwright>=1.49",
+    "openai>=1.40",
+    "pydantic>=2.7",
+    "python-dotenv>=1.0",
+]

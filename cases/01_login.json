@@ -1,0 +1,20 @@
+{
+  "id": "login-admin",
+  "title": "管理员账号登录控制台",
+  "priority": "P0",
+  "preconditions": [
+    "Halo 已通过 scripts/up.sh 启动并初始化管理员账号（凭据在 .env）"
+  ],
+  "steps": [
+    { "action": "goto", "url": "{{BASE_URL}}/console/" },
+    { "action": "fill", "selector": "role=textbox[name=\"用户名\"]", "value": "{{ADMIN_USER}}" },
+    { "action": "fill", "selector": "role=textbox[name=\"密码\"]", "value": "{{ADMIN_PASSWORD}}" },
+    { "action": "click", "selector": "role=button[name=\"登录\"]" },
+    { "action": "wait_for", "text": "仪表盘" },
+    { "action": "assert_url", "url": "/console" }
+  ],
+  "expected": [
+    "登录成功后进入控制台（URL 包含 /console）",
+    "页面出现仪表盘相关内容"
+  ]
+}

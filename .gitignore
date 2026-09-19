@@ -1,0 +1,15 @@
+# 密钥与本地运行数据一律不进仓库
+.env
+
+# Halo 数据卷 / 运行期产物
+.runtime/
+runs/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# OS
+.DS_Store

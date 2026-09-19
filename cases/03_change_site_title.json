@@ -1,0 +1,26 @@
+{
+  "id": "change-site-title",
+  "title": "修改站点标题并保存，前台生效",
+  "priority": "P1",
+  "preconditions": [
+    "管理员已登录（本用例自带登录步骤）",
+    "Halo 已通过 scripts/up.sh 启动"
+  ],
+  "steps": [
+    { "action": "goto", "url": "{{BASE_URL}}/login" },
+    { "action": "fill", "selector": "role=textbox[name=\"用户名\"]", "value": "{{ADMIN_USER}}" },
+    { "action": "fill", "selector": "role=textbox[name=\"密码\"]", "value": "{{ADMIN_PASSWORD}}" },
+    { "action": "click", "selector": "role=button[name=\"登录\"]" },
+    { "action": "goto", "url": "{{BASE_URL}}/console/" },
+    { "action": "click", "selector": "role=link[name=\"系统\"]" },
+    { "action": "click", "selector": "role=link[name=\"设置\"]" },
+    { "action": "fill", "selector": "label=站点标题", "value": "Agent 测试站 001" },
+    { "action": "click", "selector": "role=button[name=\"保存\"]" },
+    { "action": "goto", "url": "{{BASE_URL}}/" },
+    { "action": "assert_text", "text": "Agent 测试站 001" }
+  ],
+  "expected": [
+    "设置保存成功（控制台提示保存成功）",
+    "前台首页出现新站点标题「Agent 测试站 001」"
+  ]
+}
