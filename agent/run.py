@@ -53,6 +53,7 @@ def run_case_file(
 
     judge_result = None
     if not skip_judge:
+        settings.require_llm_config()
         client = LLMClient(
             run_id=run_id,
             run_dir=run_dir,
@@ -113,7 +114,7 @@ def main(argv: list[str] | None = None) -> int:
         f"[run] {report['run_id']} steps={ss['passed']}P/{ss['failed']}F/{ss['skipped']}S "
         f"verdict={judge.get('verdict')} failure_classes={json.dumps(ss['failure_classes'], ensure_ascii=False)}"
     )
-    print(f"[run] 报告: reports/{report['run_id']}.json")
+    print(f"[run] 报告: {report['artifacts'].get('report_json')}")
     return 0
 
 

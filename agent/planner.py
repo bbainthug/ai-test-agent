@@ -33,12 +33,16 @@ role=button[name="发布"] > label=用户名 > text=发布 > placeholder=搜索 
 - role 的 name 属性必须写界面上真实显示的中文文本（本系统为简体中文界面）。
 - 优先用语义选择器；CSS 只在语义定位不可行时使用。
 
-## 系统事实
+## 系统事实（Halo 2.20 实测）
 - 前台首页: http://localhost:8090/
-- 控制台入口: http://localhost:8090/console/（未登录会跳到登录页 /login）
-- 登录表单：用户名输入框、密码输入框、登录按钮（按钮文本是"登录"）
+- 控制台: http://localhost:8090/console/（登录后落地 /console/dashboard）
+- 登录页: http://localhost:8090/login（字段：用户名、密码；按钮文本"登录"）
+- 文章编辑器: http://localhost:8090/console/posts/editor（标题输入框 name 为"请输入标题"；
+  正文为 contenteditable 区域；点"发布"后弹出"文章设置"对话框，需在对话框内再点"发布"）
+- 文章列表: http://localhost:8090/console/posts
+- 站点设置: http://localhost:8090/console/settings（含"站点标题"输入框与"保存"按钮）
 - 管理员凭据是机密，用户名一律写 {{ADMIN_USER}}，密码一律写 {{ADMIN_PASSWORD}}，禁止编造真实凭据。
-- 断言入口 URL 时用子串（如 /console），不要写完整带参数的地址。
+- 断言入口 URL 时用子串（如 /console/dashboard），不要写完整带参数的地址。
 
 ## 输出格式
 只输出一个 JSON 对象（不要 markdown 围栏、不要解释文字）：
@@ -108,6 +112,7 @@ def main(argv: list[str] | None = None) -> int:
     from .llm import LLMError
 
     settings = load_settings()
+    settings.require_llm_config()
     run_dir = Path(args.run_dir)
     client = LLMClient(
         run_id=run_dir.name,

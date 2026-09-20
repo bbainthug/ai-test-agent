@@ -66,11 +66,29 @@ class Settings:
     step_timeout_ms: int
     goto_timeout_ms: int
     headless: bool
+    blocked_hosts: tuple[str, ...]
 
     @property
     def secrets(self) -> set[str]:
         """需要从快照/日志/报告中脱敏的字符串（只保留非空值）。"""
         return {v for v in (self.halo_admin_password,) if len(v) >= 4}
+
+    def require_llm_config(self) -> None:
+        """需要真正发起 LLM 调用时才校验（--skip-judge 纯断言路径不依赖 LLM）。"""
+        missing = [
+            name
+            for name, value in (
+                ("LLM_BASE_URL", self.llm_base_url),
+                ("LLM_API_KEY", self.llm_api_key),
+                ("LLM_MODEL", self.llm_model),
+            )
+            if not value
+        ]
+        if missing:
+            raise ConfigError(
+                "缺少 LLM 配置: " + ", ".join(missing)
+                + "。请参考 .env.example 填写 .env（密钥只进 .env，不进仓库）。"
+            )
 
     def template_vars(self) -> dict[str, str]:
         """用例 JSON 中 {{VAR}} 占位符的渲染来源。"""
@@ -96,9 +114,6 @@ def load_settings(env_file: str | os.PathLike[str] | None = None) -> Settings:
     missing = [
         name
         for name, value in (
-            ("LLM_BASE_URL", base_url),
-            ("LLM_API_KEY", api_key),
-            ("LLM_MODEL", model),
             ("HALO_ADMIN_USER", halo_user),
             ("HALO_ADMIN_PASSWORD", halo_password),
         )
@@ -106,9 +121,7 @@ def load_settings(env_file: str | os.PathLike[str] | None = None) -> Settings:
     ]
     if missing:
         raise ConfigError(
-            "缺少必要配置: "
-            + ", ".join(missing)
-            + "。请参考 .env.example 复制一份 .env 并填写（密钥只进 .env，不进仓库）。"
+            "缺少必要配置: " + ", ".join(missing) + "。请参考 .env.example 创建 .env。"
         )
 
     step_timeout_ms = _env_int("STEP_TIMEOUT_MS", 8000)
@@ -128,4 +141,9 @@ def load_settings(env_file: str | os.PathLike[str] | None = None) -> Settings:
         step_timeout_ms=step_timeout_ms,
         goto_timeout_ms=_env_int("GOTO_TIMEOUT_MS", 20000),
         headless=_env_bool("HEADLESS", True),
+        blocked_hosts=tuple(
+            h.strip()
+            for h in os.getenv("BLOCK_EXTERNAL_HOSTS", "").split(",")
+            if h.strip()
+        ),
     )

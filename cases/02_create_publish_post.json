@@ -3,26 +3,27 @@
   "title": "控制台新建文章并发布，前台首页可见",
   "priority": "P0",
   "preconditions": [
-    "管理员已登录（本用例自带登录步骤）",
-    "Halo 已通过 scripts/up.sh 启动"
+    "Halo 已通过 scripts/up.sh 启动",
+    "管理员凭据在 .env（本用例自带登录步骤）"
   ],
   "steps": [
     { "action": "goto", "url": "{{BASE_URL}}/login" },
     { "action": "fill", "selector": "role=textbox[name=\"用户名\"]", "value": "{{ADMIN_USER}}" },
     { "action": "fill", "selector": "role=textbox[name=\"密码\"]", "value": "{{ADMIN_PASSWORD}}" },
     { "action": "click", "selector": "role=button[name=\"登录\"]" },
-    { "action": "goto", "url": "{{BASE_URL}}/console/" },
-    { "action": "click", "selector": "role=link[name=\"文章\"]" },
-    { "action": "click", "selector": "role=button[name=\"新建\"]" },
+    { "action": "wait_for", "text": "Administrator" },
+    { "action": "goto", "url": "{{BASE_URL}}/console/posts/editor" },
     { "action": "fill", "selector": "role=textbox[name=\"请输入标题\"]", "value": "AI 测试 Agent 冒烟文章 001" },
     { "action": "fill", "selector": "[contenteditable=\"true\"]", "value": "这是 ai-test-agent 自动创建的冒烟测试文章。" },
     { "action": "click", "selector": "role=button[name=\"发布\"]" },
-    { "action": "click", "selector": "role=button[name=\"确认\"]" },
+    { "action": "wait_for", "text": "文章设置" },
+    { "action": "click", "selector": "role=dialog >> role=button[name=\"发布\"]" },
+    { "action": "wait_for", "text": "发布成功" },
     { "action": "goto", "url": "{{BASE_URL}}/" },
     { "action": "assert_text", "text": "AI 测试 Agent 冒烟文章 001" }
   ],
   "expected": [
-    "文章在控制台发布成功",
-    "前台首页文章列表中出现标题「AI 测试 Agent 冒烟文章 001」"
+    "控制台提示发布成功（文章进入已发布状态）",
+    "前台首页出现标题「AI 测试 Agent 冒烟文章 001」"
   ]
 }

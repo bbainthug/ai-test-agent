@@ -20,6 +20,8 @@
 
 from __future__ import annotations
 
+from __future__ import annotations
+
 import fnmatch
 import re
 import time
@@ -53,7 +55,7 @@ class StepResult:
     index: int  # 1-based
     action: str
     params: dict[str, str]  # 占位符原文（不渲染，防泄密）
-    status: str  # passed | failed | skipped
+    status: str = "pending"  # passed | failed | skipped（_run_step 内必定覆写）
     failure_class: str | None = None
     error: str | None = None
     elapsed_ms: int = 0
@@ -120,26 +122,39 @@ def render_template(value: str, variables: dict[str, str]) -> str:
     return _TEMPLATE_RE.sub(sub, value)
 
 
-def resolve_locator(page: Page, selector: str) -> tuple[Locator, str]:
-    """语义选择器 -> Playwright 定位器；返回 (locator, engine)。解析失败抛 ValueError。"""
-    m = _ROLE_RE.match(selector)
+def _resolve_single(scope: "Page | Locator", expr: str) -> tuple[Locator, str]:
+    """在一个作用域（page 或 locator）上解析单个选择器表达式。"""
+    m = _ROLE_RE.match(expr)
     if m:
         role, name = m.group(1), m.group(2)
-        loc = page.get_by_role(role, name=name) if name else page.get_by_role(role)
+        loc = scope.get_by_role(role, name=name) if name else scope.get_by_role(role)
         return loc, "role"
     for prefix, fn in (
-        ("label=", page.get_by_label),
-        ("text=", page.get_by_text),
-        ("placeholder=", page.get_by_placeholder),
-        ("testid=", page.get_by_test_id),
+        ("label=", scope.get_by_label),
+        ("text=", scope.get_by_text),
+        ("placeholder=", scope.get_by_placeholder),
+        ("testid=", scope.get_by_test_id),
     ):
-        if selector.startswith(prefix):
-            return fn(selector[len(prefix) :]), prefix[:-1]
-    if selector.startswith(("css=", "xpath=", "//")):
-        engine = "xpath" if selector.startswith(("xpath=", "//")) else "css"
-        sel = selector.split("=", 1)[1] if selector.startswith(("css=", "xpath=")) else selector
-        return page.locator(sel), engine
-    return page.locator(selector), "css"
+        if expr.startswith(prefix):
+            return fn(expr[len(prefix) :]), prefix[:-1]
+    if expr.startswith(("css=", "xpath=", "//")):
+        engine = "xpath" if expr.startswith(("xpath=", "//")) else "css"
+        sel = expr.split("=", 1)[1] if expr.startswith(("css=", "xpath=")) else expr
+        return scope.locator(sel), engine
+    return scope.locator(expr), "css"
+
+
+def resolve_locator(page: Page, selector: str) -> tuple[Locator, str]:
+    """语义选择器 -> Playwright 定位器；支持 `>>` 链式作用域，如
+    role=dialog >> role=button[name="发布"]（同名按钮需限定在对话框内）。
+    返回 (locator, engine)，engine 为首段引擎；解析失败抛 ValueError。"""
+    if " >> " in selector:
+        parts = [p for p in (p.strip() for p in selector.split(" >> ")) if p]
+        loc, engine = _resolve_single(page, parts[0])
+        for part in parts[1:]:
+            loc, _sub = _resolve_single(loc, part)
+        return loc, engine + "-chain"
+    return _resolve_single(page, selector)
 
 
 class Executor:
@@ -149,7 +164,35 @@ class Executor:
         self.shots_dir = self.run_dir / "shots"
         self.shots_dir.mkdir(parents=True, exist_ok=True)
 
+    @staticmethod
+    def _launch(playwright, headless: bool):
+        """启动 chromium。默认优先常规 headless；若本机只装了完整版 Chrome for
+        Testing（headless shell 变体缺失，网络受限环境常见），退回 channel=chromium
+        的 new-headless 模式。"""
+        try:
+            return playwright.chromium.launch(headless=headless)
+        except Exception as exc:  # noqa: BLE001 —— 仅对可执行文件缺失做回退
+            if "Executable doesn't exist" in str(exc) and "headless" in str(exc):
+                return playwright.chromium.launch(headless=headless, channel="chromium")
+            raise
+
     # ------------------------------------------------------------------ #
+
+    def _block_external(self, context) -> None:
+        """屏蔽被测应用的外联（如 Halo 的版本检查 release-checker.halo.run）。
+
+        目的：这些第三方调用是否成功取决于外部网络，会让"新版本可用"横幅等
+        UI 元素时有时无，直接造成用例 flaky（横幅浮层会盖住发布按钮）。
+        屏蔽是 e2e 常规做法：被测功能与外联无关，拦截清单可由
+        BLOCK_EXTERNAL_HOSTS 配置（留空关闭）。
+        """
+        hosts = self.settings.blocked_hosts
+        if not hosts:
+            return
+        pattern = re.compile(
+            r"https?://(" + "|".join(re.escape(h) for h in hosts) + r")/"
+        )
+        context.route(pattern, lambda route: route.abort())
 
     def run_case(self, case: Case) -> ExecutionResult:
         started = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -159,8 +202,9 @@ class Executor:
         variables = self.settings.template_vars()
 
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=self.settings.headless)
+            browser = self._launch(p, self.settings.headless)
             context = browser.new_context(viewport={"width": 1440, "height": 900}, locale="zh-CN")
+            self._block_external(context)
             page = context.new_page()
             try:
                 for idx, step in enumerate(case.steps, start=1):

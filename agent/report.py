@@ -66,6 +66,8 @@ def write_report(report: dict, out_dir: Path) -> tuple[Path, Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
     json_path = out_dir / f"{report['run_id']}.json"
     md_path = out_dir / f"{report['run_id']}.md"
+    report["artifacts"]["report_json"] = str(json_path)
+    report["artifacts"]["report_md"] = str(md_path)
     json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     md_path.write_text(render_markdown(report), encoding="utf-8")
     return json_path, md_path

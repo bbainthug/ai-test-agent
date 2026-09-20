@@ -1,20 +1,23 @@
 {
   "id": "login-admin",
-  "title": "管理员账号登录控制台",
+  "title": "管理员账号登录并进入控制台仪表盘",
   "priority": "P0",
   "preconditions": [
     "Halo 已通过 scripts/up.sh 启动并初始化管理员账号（凭据在 .env）"
   ],
   "steps": [
-    { "action": "goto", "url": "{{BASE_URL}}/console/" },
+    { "action": "goto", "url": "{{BASE_URL}}/login" },
     { "action": "fill", "selector": "role=textbox[name=\"用户名\"]", "value": "{{ADMIN_USER}}" },
     { "action": "fill", "selector": "role=textbox[name=\"密码\"]", "value": "{{ADMIN_PASSWORD}}" },
     { "action": "click", "selector": "role=button[name=\"登录\"]" },
+    { "action": "wait_for", "text": "Administrator" },
+    { "action": "assert_url", "url": "/uc" },
+    { "action": "goto", "url": "{{BASE_URL}}/console/" },
     { "action": "wait_for", "text": "仪表盘" },
-    { "action": "assert_url", "url": "/console" }
+    { "action": "assert_url", "url": "/console/dashboard" }
   ],
   "expected": [
-    "登录成功后进入控制台（URL 包含 /console）",
-    "页面出现仪表盘相关内容"
+    "登录成功后跳转到个人中心（URL 包含 /uc）",
+    "管理员可进入控制台仪表盘（URL 包含 /console/dashboard，页面出现“仪表盘”）"
   ]
 }
