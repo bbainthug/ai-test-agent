@@ -1,0 +1,340 @@
+{
+  "run_id": "20260921T065447Z-view-user-list-admin-role",
+  "created_at": "2026-09-21T06:55:25+00:00",
+  "target": {
+    "app": "halo",
+    "version": "registry.fit2cloud.com/halo/halo:2.20",
+    "base_url": "http://localhost:8090"
+  },
+  "llm": {
+    "model": "glm-5.3-flash",
+    "calls_total": 1,
+    "calls_failed": 0,
+    "prompt_tokens": 1295,
+    "completion_tokens": 1259,
+    "total_tokens": 2554,
+    "latency_ms": 27952,
+    "by_phase": {
+      "judge": {
+        "calls": 1,
+        "total_tokens": 2554,
+        "latency_ms": 27952
+      }
+    },
+    "calls_file": "runs/20260921T065447Z-view-user-list-admin-role/calls.jsonl"
+  },
+  "case": {
+    "id": "view-user-list-admin-role",
+    "title": "管理员登录后在用户管理页查看用户列表，可见 admin 账号及其角色",
+    "priority": "P0",
+    "preconditions": [
+      "Halo 站点已在本地 8090 端口正常运行",
+      "系统中存在管理员账号，且该账号拥有超级管理员角色"
+    ],
+    "steps": [
+      {
+        "action": "goto",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "http://localhost:8090/login",
+        "timeout_ms": null
+      },
+      {
+        "action": "fill",
+        "selector": "label=用户名",
+        "text": null,
+        "value": "{{ADMIN_USER}}",
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "fill",
+        "selector": "label=密码",
+        "text": null,
+        "value": "{{ADMIN_PASSWORD}}",
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "click",
+        "selector": "role=button[name=\"登录\"]",
+        "text": null,
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "wait_for",
+        "selector": null,
+        "text": "个人中心",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "assert_url",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "/uc/profile",
+        "timeout_ms": null
+      },
+      {
+        "action": "goto",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "http://localhost:8090/console/users",
+        "timeout_ms": null
+      },
+      {
+        "action": "wait_for",
+        "selector": null,
+        "text": "admin",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "assert_url",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "/console/users",
+        "timeout_ms": null
+      },
+      {
+        "action": "assert_text",
+        "selector": null,
+        "text": "admin",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "assert_text",
+        "selector": null,
+        "text": "超级管理员",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      }
+    ],
+    "expected": [
+      "登录成功后跳转到个人中心页面，URL 包含 /uc/profile",
+      "访问用户管理页后，URL 包含 /console/users",
+      "用户列表中可见 admin 账号",
+      "admin 账号对应的角色列显示为 超级管理员"
+    ],
+    "feature_id": "view-user-list"
+  },
+  "execution": {
+    "case_id": "view-user-list-admin-role",
+    "started_at": "2026-09-21T06:54:47+00:00",
+    "finished_at": "2026-09-21T06:54:57+00:00",
+    "final_url": "http://localhost:8090/uc/profile",
+    "steps": [
+      {
+        "index": 1,
+        "action": "goto",
+        "params": {
+          "url": "http://localhost:8090/login"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 217,
+        "screenshot": "runs/20260921T065447Z-view-user-list-admin-role/shots/view-user-list-admin-role-step01-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\"\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\"\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 2,
+        "action": "fill",
+        "params": {
+          "selector": "label=用户名",
+          "value": "{{ADMIN_USER}}"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 8,
+        "screenshot": "runs/20260921T065447Z-view-user-list-admin-role/shots/view-user-list-admin-role-step02-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\": admin\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\"\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 3,
+        "action": "fill",
+        "params": {
+          "selector": "label=密码",
+          "value": "{{ADMIN_PASSWORD}}"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 17,
+        "screenshot": "runs/20260921T065447Z-view-user-list-admin-role/shots/view-user-list-admin-role-step03-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\": admin\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\": ***\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 4,
+        "action": "click",
+        "params": {
+          "selector": "role=button[name=\"登录\"]"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 151,
+        "screenshot": "runs/20260921T065447Z-view-user-list-admin-role/shots/view-user-list-admin-role-step04-passed.png",
+        "url_after": "http://localhost:8090/uc/",
+        "snapshot": "(无法获取页面快照)"
+      },
+      {
+        "index": 5,
+        "action": "wait_for",
+        "params": {
+          "text": "个人中心"
+        },
+        "status": "failed",
+        "failure_class": "timeout",
+        "error": "等待超时(8000ms): selector=None text='个人中心'; Locator.wait_for: Timeout 8000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"个人中心\").first to be visible\n",
+        "elapsed_ms": 8010,
+        "screenshot": "runs/20260921T065447Z-view-user-list-admin-role/shots/view-user-list-admin-role-step05-failed.png",
+        "url_after": "http://localhost:8090/uc/profile",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - list:\n    - listitem:\n      - img\n      - text: 我的\n    - listitem:\n      - img\n      - text: 消息\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /console\n    - img\n  - img\n- main:\n  - text: A\n  - img\n  - heading \"Administrator\" [level=1]\n  - text: \"@admin\"\n  - button \"编辑\"\n  - text: 详情 通知配置 个人令牌 两步验证 登录设备\n  - term: 显示名称\n  - definition: Administrator\n  - term: 用户名\n  - definition: admin\n  - term: 电子邮箱\n  - definition:\n    - text: agent-test@example.com\n    - img\n    - text: 验证电子邮箱 电子邮箱地址还未验证，点击下方按钮进行验证\n    - button \"验证\"\n  - term: 角色\n  - definition:\n    - img\n    - text: 超级管理员\n  - term: 描述\n  - definition: 无\n  - term: 注册时间\n  - definition: 2026-09-19 16:42\n  - text: Powered by\n  - link \"Halo\":\n    - /url: https://www.halo.run"
+      },
+      {
+        "index": 6,
+        "action": "assert_url",
+        "params": {
+          "url": "/uc/profile"
+        },
+        "status": "skipped",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 0,
+        "screenshot": null,
+        "url_after": null,
+        "snapshot": null
+      },
+      {
+        "index": 7,
+        "action": "goto",
+        "params": {
+          "url": "http://localhost:8090/console/users"
+        },
+        "status": "skipped",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 0,
+        "screenshot": null,
+        "url_after": null,
+        "snapshot": null
+      },
+      {
+        "index": 8,
+        "action": "wait_for",
+        "params": {
+          "text": "admin"
+        },
+        "status": "skipped",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 0,
+        "screenshot": null,
+        "url_after": null,
+        "snapshot": null
+      },
+      {
+        "index": 9,
+        "action": "assert_url",
+        "params": {
+          "url": "/console/users"
+        },
+        "status": "skipped",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 0,
+        "screenshot": null,
+        "url_after": null,
+        "snapshot": null
+      },
+      {
+        "index": 10,
+        "action": "assert_text",
+        "params": {
+          "text": "admin"
+        },
+        "status": "skipped",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 0,
+        "screenshot": null,
+        "url_after": null,
+        "snapshot": null
+      },
+      {
+        "index": 11,
+        "action": "assert_text",
+        "params": {
+          "text": "超级管理员"
+        },
+        "status": "skipped",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 0,
+        "screenshot": null,
+        "url_after": null,
+        "snapshot": null
+      }
+    ],
+    "final_snapshot_numbered": "L1: - complementary:\nL2:   - link \"访问首页\":\nL3:     - /url: /\nL4:     - img\nL5:   - list:\nL6:     - listitem:\nL7:       - img\nL8:       - text: 我的\nL9:     - listitem:\nL10:       - img\nL11:       - text: 消息\nL12:     - listitem: 内容\nL13:     - listitem:\nL14:       - img\nL15:       - text: 文章\nL16:   - text: Administrator\nL17:   - img\nL18:   - text: 超级管理员\nL19:   - link:\nL20:     - /url: /console\nL21:     - img\nL22:   - img\nL23: - main:\nL24:   - text: A\nL25:   - img\nL26:   - heading \"Administrator\" [level=1]\nL27:   - text: \"@admin\"\nL28:   - button \"编辑\"\nL29:   - text: 详情 通知配置 个人令牌 两步验证 登录设备\nL30:   - term: 显示名称\nL31:   - definition: Administrator\nL32:   - term: 用户名\nL33:   - definition: admin\nL34:   - term: 电子邮箱\nL35:   - definition:\nL36:     - text: agent-test@example.com\nL37:     - img\nL38:     - text: 验证电子邮箱 电子邮箱地址还未验证，点击下方按钮进行验证\nL39:     - button \"验证\"\nL40:   - term: 角色\nL41:   - definition:\nL42:     - img\nL43:     - text: 超级管理员\nL44:   - term: 描述\nL45:   - definition: 无\nL46:   - term: 注册时间\nL47:   - definition: 2026-09-19 16:42\nL48:   - text: Powered by\nL49:   - link \"Halo\":\nL50:     - /url: https://www.halo.run",
+    "notes": []
+  },
+  "step_summary": {
+    "total": 11,
+    "passed": 4,
+    "failed": 1,
+    "skipped": 6,
+    "failure_classes": {
+      "timeout": 1
+    }
+  },
+  "judge": {
+    "verdict": "unsure",
+    "reason": "步骤5等待'个人中心'超时失败，步骤6-11全部跳过，/uc/profile 与 /console/users 的 URL 断言及用户列表断言均未执行，快照仅显示个人中心式页面而非用户列表页，各预期既无法证实也无法证伪。",
+    "evidence": [
+      {
+        "expected_index": 0,
+        "snapshot_line": 26,
+        "quote": "heading \"Administrator\" [level=1]"
+      },
+      {
+        "expected_index": 1,
+        "snapshot_line": 29,
+        "quote": "详情 通知配置 个人令牌 两步验证 登录设备"
+      },
+      {
+        "expected_index": 2,
+        "snapshot_line": 33,
+        "quote": "definition: admin"
+      },
+      {
+        "expected_index": 3,
+        "snapshot_line": 43,
+        "quote": "text: 超级管理员"
+      }
+    ],
+    "parsed": true
+  },
+  "artifacts": {
+    "run_dir": "runs/20260921T065447Z-view-user-list-admin-role",
+    "calls_jsonl": "runs/20260921T065447Z-view-user-list-admin-role/calls.jsonl",
+    "report_json": "reports/20260921T065447Z-view-user-list-admin-role.json",
+    "report_md": "reports/20260921T065447Z-view-user-list-admin-role.md"
+  }
+}

@@ -1,0 +1,304 @@
+{
+  "run_id": "20260921T065715Z-view-user-list",
+  "created_at": "2026-09-21T07:01:27+00:00",
+  "target": {
+    "app": "halo",
+    "version": "registry.fit2cloud.com/halo/halo:2.20",
+    "base_url": "http://localhost:8090"
+  },
+  "llm": {
+    "model": "glm-5.3-flash",
+    "calls_total": 2,
+    "calls_failed": 1,
+    "prompt_tokens": 721,
+    "completion_tokens": 3086,
+    "total_tokens": 3807,
+    "latency_ms": 249654,
+    "by_phase": {
+      "judge": {
+        "calls": 2,
+        "total_tokens": 3807,
+        "latency_ms": 249654
+      }
+    },
+    "calls_file": "runs/20260921T065715Z-view-user-list/calls.jsonl"
+  },
+  "case": {
+    "id": "view-user-list",
+    "title": "管理员登录后在用户管理页查看用户列表及 admin 账号角色",
+    "priority": "P1",
+    "preconditions": [
+      "Halo 已在本地 http://localhost:8090 正常运行",
+      "系统中存在用户名为 admin 的管理员账号",
+      "管理员凭据通过 {{ADMIN_USER}} / {{ADMIN_PASSWORD}} 占位符注入"
+    ],
+    "steps": [
+      {
+        "action": "goto",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "http://localhost:8090/login",
+        "timeout_ms": null
+      },
+      {
+        "action": "fill",
+        "selector": "label=用户名",
+        "text": null,
+        "value": "{{ADMIN_USER}}",
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "fill",
+        "selector": "label=密码",
+        "text": null,
+        "value": "{{ADMIN_PASSWORD}}",
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "click",
+        "selector": "role=button[name=\"登录\"]",
+        "text": null,
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "assert_url",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "/uc/profile",
+        "timeout_ms": null
+      },
+      {
+        "action": "goto",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "http://localhost:8090/console/users",
+        "timeout_ms": null
+      },
+      {
+        "action": "assert_url",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "/console/users",
+        "timeout_ms": null
+      },
+      {
+        "action": "wait_for",
+        "selector": null,
+        "text": "admin",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "assert_text",
+        "selector": null,
+        "text": "admin",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "assert_text",
+        "selector": null,
+        "text": "超级管理员",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      }
+    ],
+    "expected": [
+      "登录成功后页面跳转，URL 包含 /uc/profile",
+      "进入用户管理页后 URL 包含 /console/users",
+      "用户列表加载完成，页面中可见用户名 admin",
+      "admin 账号所在行可见其角色“超级管理员”"
+    ],
+    "feature_id": "view-user-list"
+  },
+  "execution": {
+    "case_id": "view-user-list",
+    "started_at": "2026-09-21T06:57:15+00:00",
+    "finished_at": "2026-09-21T06:57:17+00:00",
+    "final_url": "http://localhost:8090/uc/",
+    "steps": [
+      {
+        "index": 1,
+        "action": "goto",
+        "params": {
+          "url": "http://localhost:8090/login"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 169,
+        "screenshot": "runs/20260921T065715Z-view-user-list/shots/view-user-list-step01-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\"\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\"\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 2,
+        "action": "fill",
+        "params": {
+          "selector": "label=用户名",
+          "value": "{{ADMIN_USER}}"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 8,
+        "screenshot": "runs/20260921T065715Z-view-user-list/shots/view-user-list-step02-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\": admin\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\"\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 3,
+        "action": "fill",
+        "params": {
+          "selector": "label=密码",
+          "value": "{{ADMIN_PASSWORD}}"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 20,
+        "screenshot": "runs/20260921T065715Z-view-user-list/shots/view-user-list-step03-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\": admin\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\": ***\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 4,
+        "action": "click",
+        "params": {
+          "selector": "role=button[name=\"登录\"]"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 156,
+        "screenshot": "runs/20260921T065715Z-view-user-list/shots/view-user-list-step04-passed.png",
+        "url_after": "http://localhost:8090/uc/",
+        "snapshot": "(无法获取页面快照)"
+      },
+      {
+        "index": 5,
+        "action": "assert_url",
+        "params": {
+          "url": "/uc/profile"
+        },
+        "status": "failed",
+        "failure_class": "assert_failed",
+        "error": "断言失败: 期望 URL 包含/匹配 '/uc/profile'，实际 'http://localhost:8090/uc/'",
+        "elapsed_ms": 0,
+        "screenshot": "runs/20260921T065715Z-view-user-list/shots/view-user-list-step05-failed.png",
+        "url_after": "http://localhost:8090/uc/",
+        "snapshot": "(无法获取页面快照)"
+      },
+      {
+        "index": 6,
+        "action": "goto",
+        "params": {
+          "url": "http://localhost:8090/console/users"
+        },
+        "status": "skipped",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 0,
+        "screenshot": null,
+        "url_after": null,
+        "snapshot": null
+      },
+      {
+        "index": 7,
+        "action": "assert_url",
+        "params": {
+          "url": "/console/users"
+        },
+        "status": "skipped",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 0,
+        "screenshot": null,
+        "url_after": null,
+        "snapshot": null
+      },
+      {
+        "index": 8,
+        "action": "wait_for",
+        "params": {
+          "text": "admin"
+        },
+        "status": "skipped",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 0,
+        "screenshot": null,
+        "url_after": null,
+        "snapshot": null
+      },
+      {
+        "index": 9,
+        "action": "assert_text",
+        "params": {
+          "text": "admin"
+        },
+        "status": "skipped",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 0,
+        "screenshot": null,
+        "url_after": null,
+        "snapshot": null
+      },
+      {
+        "index": 10,
+        "action": "assert_text",
+        "params": {
+          "text": "超级管理员"
+        },
+        "status": "skipped",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 0,
+        "screenshot": null,
+        "url_after": null,
+        "snapshot": null
+      }
+    ],
+    "final_snapshot_numbered": "L1: (无法获取页面快照)",
+    "notes": []
+  },
+  "step_summary": {
+    "total": 10,
+    "passed": 4,
+    "failed": 1,
+    "skipped": 5,
+    "failure_classes": {
+      "assert_failed": 1
+    }
+  },
+  "judge": {
+    "verdict": "fail",
+    "reason": "步骤5断言失败：登录后实际URL为 http://localhost:8090/uc/，不包含 /uc/profile，与预期0明确矛盾，且步骤6-10因失败被跳过，预期1-3无法验证",
+    "evidence": [
+      {
+        "expected_index": 0,
+        "snapshot_line": 1,
+        "quote": "(无法获取页面快照)"
+      }
+    ],
+    "parsed": true
+  },
+  "artifacts": {
+    "run_dir": "runs/20260921T065715Z-view-user-list",
+    "calls_jsonl": "runs/20260921T065715Z-view-user-list/calls.jsonl",
+    "report_json": "reports/20260921T065715Z-view-user-list.json",
+    "report_md": "reports/20260921T065715Z-view-user-list.md"
+  }
+}

@@ -1,0 +1,394 @@
+{
+  "run_id": "20260921T070334Z-create-publish-post",
+  "created_at": "2026-09-21T07:03:52+00:00",
+  "target": {
+    "app": "halo",
+    "version": "registry.fit2cloud.com/halo/halo:2.20",
+    "base_url": "http://localhost:8090"
+  },
+  "llm": {
+    "model": "glm-5.3-flash",
+    "calls_total": 1,
+    "calls_failed": 0,
+    "prompt_tokens": 2653,
+    "completion_tokens": 654,
+    "total_tokens": 3307,
+    "latency_ms": 13227,
+    "by_phase": {
+      "judge": {
+        "calls": 1,
+        "total_tokens": 3307,
+        "latency_ms": 13227
+      }
+    },
+    "calls_file": "runs/20260921T070334Z-create-publish-post/calls.jsonl"
+  },
+  "case": {
+    "id": "create-publish-post",
+    "title": "控制台新建文章并发布，前台首页可见",
+    "priority": "P0",
+    "preconditions": [
+      "Halo 已通过 scripts/up.sh 启动",
+      "管理员凭据在 .env（本用例自带登录步骤）"
+    ],
+    "steps": [
+      {
+        "action": "goto",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "{{BASE_URL}}/login",
+        "timeout_ms": null
+      },
+      {
+        "action": "fill",
+        "selector": "role=textbox[name=\"用户名\"]",
+        "text": null,
+        "value": "{{ADMIN_USER}}",
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "fill",
+        "selector": "role=textbox[name=\"密码\"]",
+        "text": null,
+        "value": "{{ADMIN_PASSWORD}}",
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "click",
+        "selector": "role=button[name=\"登录\"]",
+        "text": null,
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "wait_for",
+        "selector": null,
+        "text": "Administrator",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "goto",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "{{BASE_URL}}/console/posts/editor",
+        "timeout_ms": null
+      },
+      {
+        "action": "fill",
+        "selector": "role=textbox[name=\"请输入标题\"]",
+        "text": null,
+        "value": "AI 测试 Agent 冒烟文章 001",
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "fill",
+        "selector": "[contenteditable=\"true\"]",
+        "text": null,
+        "value": "这是 ai-test-agent 自动创建的冒烟测试文章。",
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "click",
+        "selector": "role=button[name=\"发布\"]",
+        "text": null,
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "wait_for",
+        "selector": null,
+        "text": "文章设置",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "click",
+        "selector": "role=dialog >> role=button[name=\"发布\"]",
+        "text": null,
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "wait_for",
+        "selector": null,
+        "text": "发布成功",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "goto",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "{{BASE_URL}}/",
+        "timeout_ms": null
+      },
+      {
+        "action": "assert_text",
+        "selector": null,
+        "text": "AI 测试 Agent 冒烟文章 001",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      }
+    ],
+    "expected": [
+      "控制台提示发布成功（文章进入已发布状态）",
+      "前台首页出现标题「AI 测试 Agent 冒烟文章 001」"
+    ],
+    "feature_id": null
+  },
+  "execution": {
+    "case_id": "create-publish-post",
+    "started_at": "2026-09-21T07:03:34+00:00",
+    "finished_at": "2026-09-21T07:03:38+00:00",
+    "final_url": "http://localhost:8090/",
+    "steps": [
+      {
+        "index": 1,
+        "action": "goto",
+        "params": {
+          "url": "{{BASE_URL}}/login"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 131,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step01-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\"\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\"\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 2,
+        "action": "fill",
+        "params": {
+          "selector": "role=textbox[name=\"用户名\"]",
+          "value": "{{ADMIN_USER}}"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 9,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step02-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\": admin\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\"\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 3,
+        "action": "fill",
+        "params": {
+          "selector": "role=textbox[name=\"密码\"]",
+          "value": "{{ADMIN_PASSWORD}}"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 16,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step03-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\": admin\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\": ***\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 4,
+        "action": "click",
+        "params": {
+          "selector": "role=button[name=\"登录\"]"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 139,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step04-passed.png",
+        "url_after": "http://localhost:8090/uc/",
+        "snapshot": "(无法获取页面快照)"
+      },
+      {
+        "index": 5,
+        "action": "wait_for",
+        "params": {
+          "text": "Administrator"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 104,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step05-passed.png",
+        "url_after": "http://localhost:8090/uc/profile",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - list:\n    - listitem:\n      - img\n      - text: 我的\n    - listitem:\n      - img\n      - text: 消息\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /console\n    - img\n  - img\n- main:\n  - text: A\n  - img\n  - heading \"Administrator\" [level=1]\n  - text: \"@admin\"\n  - button \"编辑\"\n  - text: 详情 通知配置 个人令牌 两步验证 登录设备\n  - term: 显示名称\n  - definition: Administrator\n  - term: 用户名\n  - definition: admin\n  - term: 电子邮箱\n  - definition:\n    - text: agent-test@example.com\n    - img\n    - text: 验证电子邮箱 电子邮箱地址还未验证，点击下方按钮进行验证\n    - button \"验证\"\n  - term: 角色\n  - definition:\n    - img\n    - text: 超级管理员\n  - term: 描述\n  - definition: 无\n  - term: 注册时间\n  - definition: 2026-09-19 16:42\n  - text: Powered by\n  - link \"Halo\":\n    - /url: https://www.halo.run"
+      },
+      {
+        "index": 6,
+        "action": "goto",
+        "params": {
+          "url": "{{BASE_URL}}/console/posts/editor"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 224,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step06-passed.png",
+        "url_after": "http://localhost:8090/console/posts/editor",
+        "snapshot": "(无法获取页面快照)"
+      },
+      {
+        "index": 7,
+        "action": "fill",
+        "params": {
+          "selector": "role=textbox[name=\"请输入标题\"]",
+          "value": "AI 测试 Agent 冒烟文章 001"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 181,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step07-passed.png",
+        "url_after": "http://localhost:8090/console/posts/editor",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - img\n  - text: 搜索 ⌘+K\n  - list:\n    - listitem:\n      - img\n      - text: 仪表盘\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n    - listitem:\n      - img\n      - text: 页面\n    - listitem:\n      - img\n      - text: 评论\n    - listitem:\n      - img\n      - text: 附件\n    - listitem: 外观\n    - listitem:\n      - img\n      - text: 主题\n    - listitem:\n      - img\n      - text: 菜单\n    - listitem: 系统\n    - listitem:\n      - img\n      - text: 插件\n    - listitem:\n      - img\n      - text: 用户\n    - listitem:\n      - img\n      - text: 设置\n    - listitem:\n      - img\n      - text: 概览\n    - listitem:\n      - img\n      - text: 备份\n    - listitem:\n      - img\n      - text: 工具\n    - listitem:\n      - img\n      - text: 应用市场\n      - img\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /uc\n    - img\n  - img\n- main:\n  - heading \"文章\" [level=2]:\n    - img\n    - text: 文章\n  - button \"预览\":\n    - img\n    - text: 预览\n  - button \"保存\":\n    - img\n    - text: 保存\n  - button \"发布\":\n    - img\n    - text: 发布\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - textbox \"请输入标题\": AI 测试 Agent 冒烟文章 001\n  - textbox:\n    - paragraph: 输入 / 以选择输入类型\n  - text: 大纲 详情 暂无大纲"
+      },
+      {
+        "index": 8,
+        "action": "fill",
+        "params": {
+          "selector": "[contenteditable=\"true\"]",
+          "value": "这是 ai-test-agent 自动创建的冒烟测试文章。"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 5,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step08-passed.png",
+        "url_after": "http://localhost:8090/console/posts/editor",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - img\n  - text: 搜索 ⌘+K\n  - list:\n    - listitem:\n      - img\n      - text: 仪表盘\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n    - listitem:\n      - img\n      - text: 页面\n    - listitem:\n      - img\n      - text: 评论\n    - listitem:\n      - img\n      - text: 附件\n    - listitem: 外观\n    - listitem:\n      - img\n      - text: 主题\n    - listitem:\n      - img\n      - text: 菜单\n    - listitem: 系统\n    - listitem:\n      - img\n      - text: 插件\n    - listitem:\n      - img\n      - text: 用户\n    - listitem:\n      - img\n      - text: 设置\n    - listitem:\n      - img\n      - text: 概览\n    - listitem:\n      - img\n      - text: 备份\n    - listitem:\n      - img\n      - text: 工具\n    - listitem:\n      - img\n      - text: 应用市场\n      - img\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /uc\n    - img\n  - img\n- main:\n  - heading \"文章\" [level=2]:\n    - img\n    - text: 文章\n  - button \"预览\":\n    - img\n    - text: 预览\n  - button \"保存\":\n    - img\n    - text: 保存\n  - button \"发布\":\n    - img\n    - text: 发布\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - textbox \"请输入标题\": AI 测试 Agent 冒烟文章 001\n  - textbox:\n    - paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n  - text: 大纲 详情 暂无大纲"
+      },
+      {
+        "index": 9,
+        "action": "click",
+        "params": {
+          "selector": "role=button[name=\"发布\"]"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 110,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step09-passed.png",
+        "url_after": "http://localhost:8090/console/posts/editor",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - img\n  - text: 搜索 ⌘+K\n  - list:\n    - listitem:\n      - img\n      - text: 仪表盘\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n    - listitem:\n      - img\n      - text: 页面\n    - listitem:\n      - img\n      - text: 评论\n    - listitem:\n      - img\n      - text: 附件\n    - listitem: 外观\n    - listitem:\n      - img\n      - text: 主题\n    - listitem:\n      - img\n      - text: 菜单\n    - listitem: 系统\n    - listitem:\n      - img\n      - text: 插件\n    - listitem:\n      - img\n      - text: 用户\n    - listitem:\n      - img\n      - text: 设置\n    - listitem:\n      - img\n      - text: 概览\n    - listitem:\n      - img\n      - text: 备份\n    - listitem:\n      - img\n      - text: 工具\n    - listitem:\n      - img\n      - text: 应用市场\n      - img\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /uc\n    - img\n  - img\n- main:\n  - dialog:\n    - text: 文章设置\n    - img\n    - text: 常规设置 标题 *\n    - textbox \"标题 *\": AI 测试 Agent 冒烟文章 001\n    - text: 别名 *\n    - textbox \"别名 *\": ai-ce-shi-agent-mou-yan-wen-zhang-001\n    - img\n    - text: 通常用于生成文章的固定链接 分类目录\n    - textbox\n    - img\n    - text: 标签\n    - textbox\n    - img\n    - checkbox \"自动生成摘要\" [checked]\n    - text: 自动生成摘要 高级设置 作者\n    - textbox\n    - text: Administrator\n    - img\n    - checkbox \"允许评论\" [checked]\n    - text: 允许评论\n    - checkbox \"是否置顶\"\n    - text: 是否置顶 可见性\n    - textbox\n    - text: 公开\n    - img\n    - text: 发表时间\n    - textbox \"发表时间\"\n    - text: 自定义模板\n    - textbox\n    - text: 默认模版\n    - img\n    - text: 封面图\n    - textbox \"封面图\"\n    - img\n    - text: 元数据\n    - group:\n      - text: 查看更多\n      - img\n    - button \"发布\"\n    - button \"保存\"\n    - button \"关闭\"\n  - heading \"文章\" [level=2]:\n    - img\n    - text: 文章\n  - button \"预览\":\n    - img\n    - text: 预览\n  - button \"保存\":\n    - img\n    - text: 保存\n  - button \"发布\":\n    - img\n    - text: 发布\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - textbox \"请输入标题\": AI 测试 Agent 冒烟文章 001\n  - textbox:\n    - paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n  - text: 大纲 详情 暂无大纲"
+      },
+      {
+        "index": 10,
+        "action": "wait_for",
+        "params": {
+          "text": "文章设置"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 3,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step10-passed.png",
+        "url_after": "http://localhost:8090/console/posts/editor",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - img\n  - text: 搜索 ⌘+K\n  - list:\n    - listitem:\n      - img\n      - text: 仪表盘\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n    - listitem:\n      - img\n      - text: 页面\n    - listitem:\n      - img\n      - text: 评论\n    - listitem:\n      - img\n      - text: 附件\n    - listitem: 外观\n    - listitem:\n      - img\n      - text: 主题\n    - listitem:\n      - img\n      - text: 菜单\n    - listitem: 系统\n    - listitem:\n      - img\n      - text: 插件\n    - listitem:\n      - img\n      - text: 用户\n    - listitem:\n      - img\n      - text: 设置\n    - listitem:\n      - img\n      - text: 概览\n    - listitem:\n      - img\n      - text: 备份\n    - listitem:\n      - img\n      - text: 工具\n    - listitem:\n      - img\n      - text: 应用市场\n      - img\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /uc\n    - img\n  - img\n- main:\n  - dialog:\n    - text: 文章设置\n    - img\n    - text: 常规设置 标题 *\n    - textbox \"标题 *\": AI 测试 Agent 冒烟文章 001\n    - text: 别名 *\n    - textbox \"别名 *\": ai-ce-shi-agent-mou-yan-wen-zhang-001\n    - img\n    - text: 通常用于生成文章的固定链接 分类目录\n    - textbox\n    - img\n    - text: 标签\n    - textbox\n    - img\n    - checkbox \"自动生成摘要\" [checked]\n    - text: 自动生成摘要 高级设置 作者\n    - textbox\n    - text: Administrator\n    - img\n    - checkbox \"允许评论\" [checked]\n    - text: 允许评论\n    - checkbox \"是否置顶\"\n    - text: 是否置顶 可见性\n    - textbox\n    - text: 公开\n    - img\n    - text: 发表时间\n    - textbox \"发表时间\"\n    - text: 自定义模板\n    - textbox\n    - text: 默认模版\n    - img\n    - text: 封面图\n    - textbox \"封面图\"\n    - img\n    - text: 元数据\n    - group:\n      - text: 查看更多\n      - img\n    - button \"发布\"\n    - button \"保存\"\n    - button \"关闭\"\n  - heading \"文章\" [level=2]:\n    - img\n    - text: 文章\n  - button \"预览\":\n    - img\n    - text: 预览\n  - button \"保存\":\n    - img\n    - text: 保存\n  - button \"发布\":\n    - img\n    - text: 发布\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - textbox \"请输入标题\": AI 测试 Agent 冒烟文章 001\n  - textbox:\n    - paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n  - text: 大纲 详情 暂无大纲"
+      },
+      {
+        "index": 11,
+        "action": "click",
+        "params": {
+          "selector": "role=dialog >> role=button[name=\"发布\"]"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 270,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step11-passed.png",
+        "url_after": "http://localhost:8090/console/posts/editor",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - img\n  - text: 搜索 ⌘+K\n  - list:\n    - listitem:\n      - img\n      - text: 仪表盘\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n    - listitem:\n      - img\n      - text: 页面\n    - listitem:\n      - img\n      - text: 评论\n    - listitem:\n      - img\n      - text: 附件\n    - listitem: 外观\n    - listitem:\n      - img\n      - text: 主题\n    - listitem:\n      - img\n      - text: 菜单\n    - listitem: 系统\n    - listitem:\n      - img\n      - text: 插件\n    - listitem:\n      - img\n      - text: 用户\n    - listitem:\n      - img\n      - text: 设置\n    - listitem:\n      - img\n      - text: 概览\n    - listitem:\n      - img\n      - text: 备份\n    - listitem:\n      - img\n      - text: 工具\n    - listitem:\n      - img\n      - text: 应用市场\n      - img\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /uc\n    - img\n  - img\n- main:\n  - dialog:\n    - text: 文章设置\n    - img\n    - text: 常规设置 标题 *\n    - textbox \"标题 *\": AI 测试 Agent 冒烟文章 001\n    - text: 别名 *\n    - textbox \"别名 *\": ai-ce-shi-agent-mou-yan-wen-zhang-001\n    - img\n    - text: 通常用于生成文章的固定链接 分类目录\n    - textbox\n    - img\n    - text: 标签\n    - textbox\n    - img\n    - checkbox \"自动生成摘要\" [checked]\n    - text: 自动生成摘要 高级设置 作者\n    - textbox\n    - text: Administrator\n    - img\n    - checkbox \"允许评论\" [checked]\n    - text: 允许评论\n    - checkbox \"是否置顶\"\n    - text: 是否置顶 可见性\n    - textbox\n    - text: 公开\n    - img\n    - text: 发表时间\n    - textbox \"发表时间\"\n    - text: 自定义模板\n    - textbox\n    - text: 默认模版\n    - img\n    - text: 封面图\n    - textbox \"封面图\"\n    - img\n    - text: 元数据\n    - group:\n      - text: 查看更多\n      - img\n    - button \"发布\"\n    - button \"保存\"\n    - button \"关闭\"\n  - heading \"文章\" [level=2]:\n    - img\n    - text: 文章\n  - button \"预览\":\n    - img\n    - text: 预览\n  - button \"保存\":\n    - img\n    - text: 保存\n  - button \"发布\":\n    - img\n    - text: 发布\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n    - img\n  - button:\n    - img\n  - button:\n    - img\n  - textbox \"请输入标题\": AI 测试 Agent 冒烟文章 001\n  - textbox:\n    - paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n  - text: 大纲 详情 暂无大纲"
+      },
+      {
+        "index": 12,
+        "action": "wait_for",
+        "params": {
+          "text": "发布成功"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 301,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step12-passed.png",
+        "url_after": "http://localhost:8090/console/posts",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - img\n  - text: 搜索 ⌘+K\n  - list:\n    - listitem:\n      - img\n      - text: 仪表盘\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n    - listitem:\n      - img\n      - text: 页面\n    - listitem:\n      - img\n      - text: 评论\n    - listitem:\n      - img\n      - text: 附件\n    - listitem: 外观\n    - listitem:\n      - img\n      - text: 主题\n    - listitem:\n      - img\n      - text: 菜单\n    - listitem: 系统\n    - listitem:\n      - img\n      - text: 插件\n    - listitem:\n      - img\n      - text: 用户\n    - listitem:\n      - img\n      - text: 设置\n    - listitem:\n      - img\n      - text: 概览\n    - listitem:\n      - img\n      - text: 备份\n    - listitem:\n      - img\n      - text: 工具\n    - listitem:\n      - img\n      - text: 应用市场\n      - img\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /uc\n    - img\n  - img\n- main:\n  - heading \"文章\" [level=2]:\n    - img\n    - text: 文章\n  - button \"分类\"\n  - button \"标签\"\n  - button \"回收站\"\n  - button \"新建\":\n    - img\n    - text: 新建\n  - checkbox\n  - textbox \"输入关键词搜索\"\n  - text: 状态：全部\n  - img\n  - text: 可见性：全部\n  - img\n  - text: 分类\n  - img\n  - text: 标签\n  - img\n  - text: 作者\n  - img\n  - text: 排序：默认\n  - img\n  - img\n  - list:\n    - listitem:\n      - checkbox\n      - link \"AI 测试 Agent 冒烟文章 001\":\n        - /url: /console/posts/editor?name=dc734526-ac70-490e-abd8-05b689198683\n      - text: 访问量 0 评论 0 A 已发布\n      - img\n      - text: 2026-09-21 15:03\n      - img\n    - listitem:\n      - checkbox\n      - link \"AI 测试 Agent 冒烟文章 001\":\n        - /url: /console/posts/editor?name=f07dc2c2-139b-4091-aa84-a4fb40233e4e\n      - text: 访问量 0 评论 0 A 已发布\n      - img\n      - text: 2026-09-21 14:47\n      - img\n    - listitem:\n      - checkbox\n      - link \"AI 测试 Agent 冒烟文章 001\":\n        - /url: /console/posts/editor?name=3b14d436-06fb-474e-8525-e05492048a39\n      - text: 访问量 0 评论 0 A 已发布\n      - img\n      - text: 2026-09-20 17:16\n      - img\n    - listitem:\n      - checkbox\n      - link \"AI 测试 Agent 冒烟文章 001\":\n        - /url: /console/posts/editor?name=438f9a57-58ed-47ab-ba55-4c72869ecb87\n      - text: 访问量 0 评论 0 A 已发布\n      - img\n      - text: 2026-09-20 17:12\n      - img\n    - listitem:\n      - checkbox\n      - link \"探测文章 X1\":\n        - /url: /console/posts/editor?name=4dffd48e-7abc-41e6-9828-265684d71b37\n      - link:\n        - /url: /console/posts/editor?name=4dffd48e-7abc-41e6-9828-265684d71b37\n      - text: 访问量 0 评论 0 A 未发布\n      - img\n      - img\n    - listitem:\n      - checkbox\n      - link \"探测器测试文章\":\n        - /url: /console/posts/editor?name=7eb140fc-1855-4cc9-93e5-b5bc67cdc98d\n      - link:\n        - /url: /console/posts/editor?name=7eb140fc-1855-4cc9-93e5-b5bc67cdc98d\n      - text: 访问量 0 评论 0 A 未发布\n      - img\n      - img\n    - listitem:\n      - checkbox\n      - link \"Hello Halo\":\n        - /url: /console/posts/editor?name=5152aea5-c2e8-4717-8bba-2263d46e19d5\n      - paragraph:\n        - text: 分类：\n        - link \"默认分类\":\n          - /url: /categories/default\n      - text: 访问量 0 评论 0 Halo A 已发布\n      - img\n      - text: 2026-09-19 16:42\n      - img\n  - text: 共 7 项数据\n  - navigation \"Pagination\":\n    - button [disabled]:\n      - img\n    - button [disabled]:\n      - img\n  - combobox:\n    - option \"1 / 1\" [selected]\n  - text: 页\n  - combobox:\n    - option \"20\" [selected]\n    - option \"30\"\n    - option \"50\"\n    - option \"100\"\n  - text: 条 / 页 Powered by\n  - link \"Halo\":\n    - /url: /console/overview\n- img\n- text: 发布成功\n- img"
+      },
+      {
+        "index": 13,
+        "action": "goto",
+        "params": {
+          "url": "{{BASE_URL}}/"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 188,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step13-passed.png",
+        "url_after": "http://localhost:8090/",
+        "snapshot": "- banner:\n  - link \"Agent 测试站 001\":\n    - /url: /\n  - list:\n    - listitem:\n      - link \"首页\":\n        - /url: /\n    - listitem:\n      - link \"Hello Halo\":\n        - /url: /archives/hello-halo\n    - listitem:\n      - link \"Halo\":\n        - /url: /tags/halo\n    - listitem:\n      - link \"关于\":\n        - /url: /about\n  - list:\n    - listitem\n    - listitem:\n      - link \"搜索\":\n        - /url: javascript:SearchWidget.open()\n    - listitem:\n      - img \"Administrator\"\n- text: Agent 测试站 001\n- list:\n  - listitem:\n    - link \"全部\":\n      - /url: /\n  - listitem:\n    - link \"默认分类\":\n      - /url: /categories/default\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-21\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-21\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-20\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 冒烟正文。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-20\n- link \"默认分类\":\n  - /url: /categories/default\n- link \"#Halo\":\n  - /url: /tags/halo\n- heading \"Hello Halo\" [level=1]:\n  - link \"Hello Halo\":\n    - /url: /archives/hello-halo\n- paragraph: 如果你看到了这一篇文章，那么证明你已经安装成功了，感谢使用 Halo 进行创作，希望能够使用愉快。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-19\n- complementary:\n  - heading \"热门文章\" [level=2]\n  - list:\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-21 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-21 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-20 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-20 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"Hello Halo\" [level=3]:\n        - link \"Hello Halo\":\n          - /url: /archives/hello-halo\n      - paragraph: 2026-09-19 发布\n      - text: \"0\"\n  - heading \"分类目录\" [level=2]\n  - list:\n    - listitem:\n      - link \"默认分类 1\":\n        - /url: /categories/default\n  - heading \"标签\" [level=2]\n  - link \"更多\":\n    - /url: /tags\n  - link \"#Halo 1\":\n    - /url: /tags/halo\n    - text: \"#Halo\"\n    - superscript: \"1\"\n- contentinfo:\n  - link \"Agent 测试站 001\":\n    - /url: /\n  - separator\n  - text: © 2026\n  - link \"Agent 测试站 001\":\n    - /url: /\n  - text: . All Rights Reserved. Powered by\n  - link \"Halo\":\n    - /url: https://halo.run\n  - text: .\n- button \"回到顶部\""
+      },
+      {
+        "index": 14,
+        "action": "assert_text",
+        "params": {
+          "text": "AI 测试 Agent 冒烟文章 001"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 3,
+        "screenshot": "runs/20260921T070334Z-create-publish-post/shots/create-publish-post-step14-passed.png",
+        "url_after": "http://localhost:8090/",
+        "snapshot": "- banner:\n  - link \"Agent 测试站 001\":\n    - /url: /\n  - list:\n    - listitem:\n      - link \"首页\":\n        - /url: /\n    - listitem:\n      - link \"Hello Halo\":\n        - /url: /archives/hello-halo\n    - listitem:\n      - link \"Halo\":\n        - /url: /tags/halo\n    - listitem:\n      - link \"关于\":\n        - /url: /about\n  - list:\n    - listitem\n    - listitem:\n      - link \"搜索\":\n        - /url: javascript:SearchWidget.open()\n    - listitem:\n      - img \"Administrator\"\n- text: Agent 测试站 001\n- list:\n  - listitem:\n    - link \"全部\":\n      - /url: /\n  - listitem:\n    - link \"默认分类\":\n      - /url: /categories/default\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-21\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-21\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-20\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 冒烟正文。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-20\n- link \"默认分类\":\n  - /url: /categories/default\n- link \"#Halo\":\n  - /url: /tags/halo\n- heading \"Hello Halo\" [level=1]:\n  - link \"Hello Halo\":\n    - /url: /archives/hello-halo\n- paragraph: 如果你看到了这一篇文章，那么证明你已经安装成功了，感谢使用 Halo 进行创作，希望能够使用愉快。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-19\n- complementary:\n  - heading \"热门文章\" [level=2]\n  - list:\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-21 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-21 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-20 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-20 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"Hello Halo\" [level=3]:\n        - link \"Hello Halo\":\n          - /url: /archives/hello-halo\n      - paragraph: 2026-09-19 发布\n      - text: \"0\"\n  - heading \"分类目录\" [level=2]\n  - list:\n    - listitem:\n      - link \"默认分类 1\":\n        - /url: /categories/default\n  - heading \"标签\" [level=2]\n  - link \"更多\":\n    - /url: /tags\n  - link \"#Halo 1\":\n    - /url: /tags/halo\n    - text: \"#Halo\"\n    - superscript: \"1\"\n- contentinfo:\n  - link \"Agent 测试站 001\":\n    - /url: /\n  - separator\n  - text: © 2026\n  - link \"Agent 测试站 001\":\n    - /url: /\n  - text: . All Rights Reserved. Powered by\n  - link \"Halo\":\n    - /url: https://halo.run\n  - text: .\n- button \"回到顶部\""
+      }
+    ],
+    "final_snapshot_numbered": "L1: - banner:\nL2:   - link \"Agent 测试站 001\":\nL3:     - /url: /\nL4:   - list:\nL5:     - listitem:\nL6:       - link \"首页\":\nL7:         - /url: /\nL8:     - listitem:\nL9:       - link \"Hello Halo\":\nL10:         - /url: /archives/hello-halo\nL11:     - listitem:\nL12:       - link \"Halo\":\nL13:         - /url: /tags/halo\nL14:     - listitem:\nL15:       - link \"关于\":\nL16:         - /url: /about\nL17:   - list:\nL18:     - listitem\nL19:     - listitem:\nL20:       - link \"搜索\":\nL21:         - /url: javascript:SearchWidget.open()\nL22:     - listitem:\nL23:       - img \"Administrator\"\nL24: - text: Agent 测试站 001\nL25: - list:\nL26:   - listitem:\nL27:     - link \"全部\":\nL28:       - /url: /\nL29:   - listitem:\nL30:     - link \"默认分类\":\nL31:       - /url: /categories/default\nL32: - heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\nL33:   - link \"AI 测试 Agent 冒烟文章 001\":\nL34:     - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL35: - paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\nL36: - link \"Administrator\":\nL37:   - /url: /authors/admin\nL38:   - img \"Administrator\"\nL39: - link \"Administrator\":\nL40:   - /url: /authors/admin\nL41: - text: 发布于 2026-09-21\nL42: - heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\nL43:   - link \"AI 测试 Agent 冒烟文章 001\":\nL44:     - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL45: - paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\nL46: - link \"Administrator\":\nL47:   - /url: /authors/admin\nL48:   - img \"Administrator\"\nL49: - link \"Administrator\":\nL50:   - /url: /authors/admin\nL51: - text: 发布于 2026-09-21\nL52: - heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\nL53:   - link \"AI 测试 Agent 冒烟文章 001\":\nL54:     - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL55: - paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\nL56: - link \"Administrator\":\nL57:   - /url: /authors/admin\nL58:   - img \"Administrator\"\nL59: - link \"Administrator\":\nL60:   - /url: /authors/admin\nL61: - text: 发布于 2026-09-20\nL62: - heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\nL63:   - link \"AI 测试 Agent 冒烟文章 001\":\nL64:     - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL65: - paragraph: 冒烟正文。\nL66: - link \"Administrator\":\nL67:   - /url: /authors/admin\nL68:   - img \"Administrator\"\nL69: - link \"Administrator\":\nL70:   - /url: /authors/admin\nL71: - text: 发布于 2026-09-20\nL72: - link \"默认分类\":\nL73:   - /url: /categories/default\nL74: - link \"#Halo\":\nL75:   - /url: /tags/halo\nL76: - heading \"Hello Halo\" [level=1]:\nL77:   - link \"Hello Halo\":\nL78:     - /url: /archives/hello-halo\nL79: - paragraph: 如果你看到了这一篇文章，那么证明你已经安装成功了，感谢使用 Halo 进行创作，希望能够使用愉快。\nL80: - link \"Administrator\":\nL81:   - /url: /authors/admin\nL82:   - img \"Administrator\"\nL83: - link \"Administrator\":\nL84:   - /url: /authors/admin\nL85: - text: 发布于 2026-09-19\nL86: - complementary:\nL87:   - heading \"热门文章\" [level=2]\nL88:   - list:\nL89:     - listitem:\nL90:       - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\nL91:         - link \"AI 测试 Agent 冒烟文章 001\":\nL92:           - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL93:       - paragraph: 2026-09-21 发布\nL94:       - text: \"0\"\nL95:     - listitem:\nL96:       - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\nL97:         - link \"AI 测试 Agent 冒烟文章 001\":\nL98:           - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL99:       - paragraph: 2026-09-21 发布\nL100:       - text: \"0\"\nL101:     - listitem:\nL102:       - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\nL103:         - link \"AI 测试 Agent 冒烟文章 001\":\nL104:           - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL105:       - paragraph: 2026-09-20 发布\nL106:       - text: \"0\"\nL107:     - listitem:\nL108:       - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\nL109:         - link \"AI 测试 Agent 冒烟文章 001\":\nL110:           - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL111:       - paragraph: 2026-09-20 发布\nL112:       - text: \"0\"\nL113:     - listitem:\nL114:       - heading \"Hello Halo\" [level=3]:\nL115:         - link \"Hello Halo\":\nL116:           - /url: /archives/hello-halo\nL117:       - paragraph: 2026-09-19 发布\nL118:       - text: \"0\"\nL119:   - heading \"分类目录\" [level=2]\nL120:   - list:\nL121:     - listitem:\nL122:       - link \"默认分类 1\":\nL123:         - /url: /categories/default\nL124:   - heading \"标签\" [level=2]\nL125:   - link \"更多\":\nL126:     - /url: /tags\nL127:   - link \"#Halo 1\":\nL128:     - /url: /tags/halo\nL129:     - text: \"#Halo\"\nL130:     - superscript: \"1\"\nL131: - contentinfo:\nL132:   - link \"Agent 测试站 001\":\nL133:     - /url: /\nL134:   - separator\nL135:   - text: © 2026\nL136:   - link \"Agent 测试站 001\":\nL137:     - /url: /\nL138:   - text: . All Rights Reserved. Powered by\nL139:   - link \"Halo\":\nL140:     - /url: https://halo.run\nL141:   - text: .\nL142: - button \"回到顶部\"",
+    "notes": []
+  },
+  "step_summary": {
+    "total": 14,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "failure_classes": {}
+  },
+  "judge": {
+    "verdict": "pass",
+    "reason": "步骤12成功等待到「发布成功」提示证明控制台发布成功，步骤14断言通过且快照L32/L41显示前台首页出现该标题且文章处于已发布状态，无任何步骤失败或跳过。",
+    "evidence": [
+      {
+        "expected_index": 0,
+        "snapshot_line": 41,
+        "quote": "- text: 发布于 2026-09-21"
+      },
+      {
+        "expected_index": 1,
+        "snapshot_line": 32,
+        "quote": "- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:"
+      }
+    ],
+    "parsed": true
+  },
+  "artifacts": {
+    "run_dir": "runs/20260921T070334Z-create-publish-post",
+    "calls_jsonl": "runs/20260921T070334Z-create-publish-post/calls.jsonl",
+    "report_json": "reports/20260921T070334Z-create-publish-post.json",
+    "report_md": "reports/20260921T070334Z-create-publish-post.md"
+  }
+}

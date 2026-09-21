@@ -1,0 +1,332 @@
+{
+  "run_id": "20260921T070352Z-change-site-title",
+  "created_at": "2026-09-21T07:04:31+00:00",
+  "target": {
+    "app": "halo",
+    "version": "registry.fit2cloud.com/halo/halo:2.20",
+    "base_url": "http://localhost:8090"
+  },
+  "llm": {
+    "model": "glm-5.3-flash",
+    "calls_total": 1,
+    "calls_failed": 0,
+    "prompt_tokens": 2558,
+    "completion_tokens": 1862,
+    "total_tokens": 4420,
+    "latency_ms": 36907,
+    "by_phase": {
+      "judge": {
+        "calls": 1,
+        "total_tokens": 4420,
+        "latency_ms": 36907
+      }
+    },
+    "calls_file": "runs/20260921T070352Z-change-site-title/calls.jsonl"
+  },
+  "case": {
+    "id": "change-site-title",
+    "title": "控制台修改站点标题，前台生效",
+    "priority": "P1",
+    "preconditions": [
+      "Halo 已通过 scripts/up.sh 启动",
+      "管理员凭据在 .env（本用例自带登录步骤）"
+    ],
+    "steps": [
+      {
+        "action": "goto",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "{{BASE_URL}}/login",
+        "timeout_ms": null
+      },
+      {
+        "action": "fill",
+        "selector": "role=textbox[name=\"用户名\"]",
+        "text": null,
+        "value": "{{ADMIN_USER}}",
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "fill",
+        "selector": "role=textbox[name=\"密码\"]",
+        "text": null,
+        "value": "{{ADMIN_PASSWORD}}",
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "click",
+        "selector": "role=button[name=\"登录\"]",
+        "text": null,
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "wait_for",
+        "selector": null,
+        "text": "Administrator",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "goto",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "{{BASE_URL}}/console/settings",
+        "timeout_ms": null
+      },
+      {
+        "action": "fill",
+        "selector": "role=textbox[name=\"站点标题\"]",
+        "text": null,
+        "value": "Agent 测试站 001",
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "click",
+        "selector": "role=button[name=\"保存\"]",
+        "text": null,
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "wait_for",
+        "selector": null,
+        "text": "保存成功",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "goto",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "{{BASE_URL}}/",
+        "timeout_ms": null
+      },
+      {
+        "action": "assert_text",
+        "selector": null,
+        "text": "Agent 测试站 001",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      }
+    ],
+    "expected": [
+      "控制台提示保存成功",
+      "前台首页出现新站点标题「Agent 测试站 001」"
+    ],
+    "feature_id": null
+  },
+  "execution": {
+    "case_id": "change-site-title",
+    "started_at": "2026-09-21T07:03:52+00:00",
+    "finished_at": "2026-09-21T07:03:54+00:00",
+    "final_url": "http://localhost:8090/",
+    "steps": [
+      {
+        "index": 1,
+        "action": "goto",
+        "params": {
+          "url": "{{BASE_URL}}/login"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 47,
+        "screenshot": "runs/20260921T070352Z-change-site-title/shots/change-site-title-step01-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\"\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\"\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 2,
+        "action": "fill",
+        "params": {
+          "selector": "role=textbox[name=\"用户名\"]",
+          "value": "{{ADMIN_USER}}"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 4,
+        "screenshot": "runs/20260921T070352Z-change-site-title/shots/change-site-title-step02-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\": admin\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\"\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 3,
+        "action": "fill",
+        "params": {
+          "selector": "role=textbox[name=\"密码\"]",
+          "value": "{{ADMIN_PASSWORD}}"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 14,
+        "screenshot": "runs/20260921T070352Z-change-site-title/shots/change-site-title-step03-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\": admin\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\": ***\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 4,
+        "action": "click",
+        "params": {
+          "selector": "role=button[name=\"登录\"]"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 130,
+        "screenshot": "runs/20260921T070352Z-change-site-title/shots/change-site-title-step04-passed.png",
+        "url_after": "http://localhost:8090/uc/",
+        "snapshot": "(无法获取页面快照)"
+      },
+      {
+        "index": 5,
+        "action": "wait_for",
+        "params": {
+          "text": "Administrator"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 103,
+        "screenshot": "runs/20260921T070352Z-change-site-title/shots/change-site-title-step05-passed.png",
+        "url_after": "http://localhost:8090/uc/profile",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - list:\n    - listitem:\n      - img\n      - text: 我的\n    - listitem:\n      - img\n      - text: 消息\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /console\n    - img\n  - img\n- main:\n  - text: A\n  - img\n  - heading \"Administrator\" [level=1]\n  - text: \"@admin\"\n  - button \"编辑\"\n  - text: 详情 通知配置 个人令牌 两步验证 登录设备\n  - term: 显示名称\n  - definition: Administrator\n  - term: 用户名\n  - definition: admin\n  - term: 电子邮箱\n  - definition:\n    - text: agent-test@example.com\n    - img\n    - text: 验证电子邮箱 电子邮箱地址还未验证，点击下方按钮进行验证\n    - button \"验证\"\n  - term: 角色\n  - definition:\n    - img\n    - text: 超级管理员\n  - term: 描述\n  - definition: 无\n  - term: 注册时间\n  - definition: 2026-09-19 16:42\n  - text: Powered by\n  - link \"Halo\":\n    - /url: https://www.halo.run"
+      },
+      {
+        "index": 6,
+        "action": "goto",
+        "params": {
+          "url": "{{BASE_URL}}/console/settings"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 218,
+        "screenshot": "runs/20260921T070352Z-change-site-title/shots/change-site-title-step06-passed.png",
+        "url_after": "http://localhost:8090/console/settings",
+        "snapshot": "(无法获取页面快照)"
+      },
+      {
+        "index": 7,
+        "action": "fill",
+        "params": {
+          "selector": "role=textbox[name=\"站点标题\"]",
+          "value": "Agent 测试站 001"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 113,
+        "screenshot": "runs/20260921T070352Z-change-site-title/shots/change-site-title-step07-passed.png",
+        "url_after": "http://localhost:8090/console/settings",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - img\n  - text: 搜索 ⌘+K\n  - list:\n    - listitem:\n      - img\n      - text: 仪表盘\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n    - listitem:\n      - img\n      - text: 页面\n    - listitem:\n      - img\n      - text: 评论\n    - listitem:\n      - img\n      - text: 附件\n    - listitem: 外观\n    - listitem:\n      - img\n      - text: 主题\n    - listitem:\n      - img\n      - text: 菜单\n    - listitem: 系统\n    - listitem:\n      - img\n      - text: 插件\n    - listitem:\n      - img\n      - text: 用户\n    - listitem:\n      - img\n      - text: 设置\n    - listitem:\n      - img\n      - text: 概览\n    - listitem:\n      - img\n      - text: 备份\n    - listitem:\n      - img\n      - text: 工具\n    - listitem:\n      - img\n      - text: 应用市场\n      - img\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /uc\n    - img\n  - img\n- main:\n  - heading \"设置\" [level=2]:\n    - img\n    - text: 设置\n  - text: 基本设置 文章设置 SEO 设置 用户设置 评论设置 主题路由设置 代码注入 通知设置 站点标题 *\n  - textbox \"站点标题 *\": Agent 测试站 001\n  - text: 站点副标题\n  - textbox \"站点副标题\"\n  - text: Logo\n  - textbox \"Logo\"\n  - img\n  - text: Favicon\n  - textbox \"Favicon\"\n  - img\n  - text: 首选语言\n  - textbox\n  - text: 简体中文\n  - img\n  - button \"保存\"\n  - text: Powered by\n  - link \"Halo\":\n    - /url: /console/overview"
+      },
+      {
+        "index": 8,
+        "action": "click",
+        "params": {
+          "selector": "role=button[name=\"保存\"]"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 31,
+        "screenshot": "runs/20260921T070352Z-change-site-title/shots/change-site-title-step08-passed.png",
+        "url_after": "http://localhost:8090/console/settings",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - img\n  - text: 搜索 ⌘+K\n  - list:\n    - listitem:\n      - img\n      - text: 仪表盘\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n    - listitem:\n      - img\n      - text: 页面\n    - listitem:\n      - img\n      - text: 评论\n    - listitem:\n      - img\n      - text: 附件\n    - listitem: 外观\n    - listitem:\n      - img\n      - text: 主题\n    - listitem:\n      - img\n      - text: 菜单\n    - listitem: 系统\n    - listitem:\n      - img\n      - text: 插件\n    - listitem:\n      - img\n      - text: 用户\n    - listitem:\n      - img\n      - text: 设置\n    - listitem:\n      - img\n      - text: 概览\n    - listitem:\n      - img\n      - text: 备份\n    - listitem:\n      - img\n      - text: 工具\n    - listitem:\n      - img\n      - text: 应用市场\n      - img\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /uc\n    - img\n  - img\n- main:\n  - heading \"设置\" [level=2]:\n    - img\n    - text: 设置\n  - text: 基本设置 文章设置 SEO 设置 用户设置 评论设置 主题路由设置 代码注入 通知设置 站点标题 *\n  - textbox \"站点标题 *\": Agent 测试站 001\n  - text: 站点副标题\n  - textbox \"站点副标题\"\n  - text: Logo\n  - textbox \"Logo\"\n  - img\n  - text: Favicon\n  - textbox \"Favicon\"\n  - img\n  - text: 首选语言\n  - textbox\n  - text: 简体中文\n  - img\n  - button \"保存\"\n  - text: Powered by\n  - link \"Halo\":\n    - /url: /console/overview\n- img\n- text: 保存成功\n- img"
+      },
+      {
+        "index": 9,
+        "action": "wait_for",
+        "params": {
+          "text": "保存成功"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 3,
+        "screenshot": "runs/20260921T070352Z-change-site-title/shots/change-site-title-step09-passed.png",
+        "url_after": "http://localhost:8090/console/settings",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - img\n  - text: 搜索 ⌘+K\n  - list:\n    - listitem:\n      - img\n      - text: 仪表盘\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n    - listitem:\n      - img\n      - text: 页面\n    - listitem:\n      - img\n      - text: 评论\n    - listitem:\n      - img\n      - text: 附件\n    - listitem: 外观\n    - listitem:\n      - img\n      - text: 主题\n    - listitem:\n      - img\n      - text: 菜单\n    - listitem: 系统\n    - listitem:\n      - img\n      - text: 插件\n    - listitem:\n      - img\n      - text: 用户\n    - listitem:\n      - img\n      - text: 设置\n    - listitem:\n      - img\n      - text: 概览\n    - listitem:\n      - img\n      - text: 备份\n    - listitem:\n      - img\n      - text: 工具\n    - listitem:\n      - img\n      - text: 应用市场\n      - img\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /uc\n    - img\n  - img\n- main:\n  - heading \"设置\" [level=2]:\n    - img\n    - text: 设置\n  - text: 基本设置 文章设置 SEO 设置 用户设置 评论设置 主题路由设置 代码注入 通知设置 站点标题 *\n  - textbox \"站点标题 *\": Agent 测试站 001\n  - text: 站点副标题\n  - textbox \"站点副标题\"\n  - text: Logo\n  - textbox \"Logo\"\n  - img\n  - text: Favicon\n  - textbox \"Favicon\"\n  - img\n  - text: 首选语言\n  - textbox\n  - text: 简体中文\n  - img\n  - button \"保存\"\n  - text: Powered by\n  - link \"Halo\":\n    - /url: /console/overview\n- img\n- text: 保存成功\n- img"
+      },
+      {
+        "index": 10,
+        "action": "goto",
+        "params": {
+          "url": "{{BASE_URL}}/"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 159,
+        "screenshot": "runs/20260921T070352Z-change-site-title/shots/change-site-title-step10-passed.png",
+        "url_after": "http://localhost:8090/",
+        "snapshot": "- banner:\n  - link \"Agent 测试站 001\":\n    - /url: /\n  - list:\n    - listitem:\n      - link \"首页\":\n        - /url: /\n    - listitem:\n      - link \"Hello Halo\":\n        - /url: /archives/hello-halo\n    - listitem:\n      - link \"Halo\":\n        - /url: /tags/halo\n    - listitem:\n      - link \"关于\":\n        - /url: /about\n  - list:\n    - listitem\n    - listitem:\n      - link \"搜索\":\n        - /url: javascript:SearchWidget.open()\n    - listitem:\n      - img \"Administrator\"\n- text: Agent 测试站 001\n- list:\n  - listitem:\n    - link \"全部\":\n      - /url: /\n  - listitem:\n    - link \"默认分类\":\n      - /url: /categories/default\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-21\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-21\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-20\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 冒烟正文。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-20\n- link \"默认分类\":\n  - /url: /categories/default\n- link \"#Halo\":\n  - /url: /tags/halo\n- heading \"Hello Halo\" [level=1]:\n  - link \"Hello Halo\":\n    - /url: /archives/hello-halo\n- paragraph: 如果你看到了这一篇文章，那么证明你已经安装成功了，感谢使用 Halo 进行创作，希望能够使用愉快。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-19\n- complementary:\n  - heading \"热门文章\" [level=2]\n  - list:\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-21 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-21 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-20 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-20 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"Hello Halo\" [level=3]:\n        - link \"Hello Halo\":\n          - /url: /archives/hello-halo\n      - paragraph: 2026-09-19 发布\n      - text: \"0\"\n  - heading \"分类目录\" [level=2]\n  - list:\n    - listitem:\n      - link \"默认分类 1\":\n        - /url: /categories/default\n  - heading \"标签\" [level=2]\n  - link \"更多\":\n    - /url: /tags\n  - link \"#Halo 1\":\n    - /url: /tags/halo\n    - text: \"#Halo\"\n    - superscript: \"1\"\n- contentinfo:\n  - link \"Agent 测试站 001\":\n    - /url: /\n  - separator\n  - text: © 2026\n  - link \"Agent 测试站 001\":\n    - /url: /\n  - text: . All Rights Reserved. Powered by\n  - link \"Halo\":\n    - /url: https://halo.run\n  - text: .\n- button \"回到顶部\""
+      },
+      {
+        "index": 11,
+        "action": "assert_text",
+        "params": {
+          "text": "Agent 测试站 001"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 2,
+        "screenshot": "runs/20260921T070352Z-change-site-title/shots/change-site-title-step11-passed.png",
+        "url_after": "http://localhost:8090/",
+        "snapshot": "- banner:\n  - link \"Agent 测试站 001\":\n    - /url: /\n  - list:\n    - listitem:\n      - link \"首页\":\n        - /url: /\n    - listitem:\n      - link \"Hello Halo\":\n        - /url: /archives/hello-halo\n    - listitem:\n      - link \"Halo\":\n        - /url: /tags/halo\n    - listitem:\n      - link \"关于\":\n        - /url: /about\n  - list:\n    - listitem\n    - listitem:\n      - link \"搜索\":\n        - /url: javascript:SearchWidget.open()\n    - listitem:\n      - img \"Administrator\"\n- text: Agent 测试站 001\n- list:\n  - listitem:\n    - link \"全部\":\n      - /url: /\n  - listitem:\n    - link \"默认分类\":\n      - /url: /categories/default\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-21\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-21\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-20\n- heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\n  - link \"AI 测试 Agent 冒烟文章 001\":\n    - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n- paragraph: 冒烟正文。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-20\n- link \"默认分类\":\n  - /url: /categories/default\n- link \"#Halo\":\n  - /url: /tags/halo\n- heading \"Hello Halo\" [level=1]:\n  - link \"Hello Halo\":\n    - /url: /archives/hello-halo\n- paragraph: 如果你看到了这一篇文章，那么证明你已经安装成功了，感谢使用 Halo 进行创作，希望能够使用愉快。\n- link \"Administrator\":\n  - /url: /authors/admin\n  - img \"Administrator\"\n- link \"Administrator\":\n  - /url: /authors/admin\n- text: 发布于 2026-09-19\n- complementary:\n  - heading \"热门文章\" [level=2]\n  - list:\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-21 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-21 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-20 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\n        - link \"AI 测试 Agent 冒烟文章 001\":\n          - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\n      - paragraph: 2026-09-20 发布\n      - text: \"0\"\n    - listitem:\n      - heading \"Hello Halo\" [level=3]:\n        - link \"Hello Halo\":\n          - /url: /archives/hello-halo\n      - paragraph: 2026-09-19 发布\n      - text: \"0\"\n  - heading \"分类目录\" [level=2]\n  - list:\n    - listitem:\n      - link \"默认分类 1\":\n        - /url: /categories/default\n  - heading \"标签\" [level=2]\n  - link \"更多\":\n    - /url: /tags\n  - link \"#Halo 1\":\n    - /url: /tags/halo\n    - text: \"#Halo\"\n    - superscript: \"1\"\n- contentinfo:\n  - link \"Agent 测试站 001\":\n    - /url: /\n  - separator\n  - text: © 2026\n  - link \"Agent 测试站 001\":\n    - /url: /\n  - text: . All Rights Reserved. Powered by\n  - link \"Halo\":\n    - /url: https://halo.run\n  - text: .\n- button \"回到顶部\""
+      }
+    ],
+    "final_snapshot_numbered": "L1: - banner:\nL2:   - link \"Agent 测试站 001\":\nL3:     - /url: /\nL4:   - list:\nL5:     - listitem:\nL6:       - link \"首页\":\nL7:         - /url: /\nL8:     - listitem:\nL9:       - link \"Hello Halo\":\nL10:         - /url: /archives/hello-halo\nL11:     - listitem:\nL12:       - link \"Halo\":\nL13:         - /url: /tags/halo\nL14:     - listitem:\nL15:       - link \"关于\":\nL16:         - /url: /about\nL17:   - list:\nL18:     - listitem\nL19:     - listitem:\nL20:       - link \"搜索\":\nL21:         - /url: javascript:SearchWidget.open()\nL22:     - listitem:\nL23:       - img \"Administrator\"\nL24: - text: Agent 测试站 001\nL25: - list:\nL26:   - listitem:\nL27:     - link \"全部\":\nL28:       - /url: /\nL29:   - listitem:\nL30:     - link \"默认分类\":\nL31:       - /url: /categories/default\nL32: - heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\nL33:   - link \"AI 测试 Agent 冒烟文章 001\":\nL34:     - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL35: - paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\nL36: - link \"Administrator\":\nL37:   - /url: /authors/admin\nL38:   - img \"Administrator\"\nL39: - link \"Administrator\":\nL40:   - /url: /authors/admin\nL41: - text: 发布于 2026-09-21\nL42: - heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\nL43:   - link \"AI 测试 Agent 冒烟文章 001\":\nL44:     - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL45: - paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\nL46: - link \"Administrator\":\nL47:   - /url: /authors/admin\nL48:   - img \"Administrator\"\nL49: - link \"Administrator\":\nL50:   - /url: /authors/admin\nL51: - text: 发布于 2026-09-21\nL52: - heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\nL53:   - link \"AI 测试 Agent 冒烟文章 001\":\nL54:     - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL55: - paragraph: 这是 ai-test-agent 自动创建的冒烟测试文章。\nL56: - link \"Administrator\":\nL57:   - /url: /authors/admin\nL58:   - img \"Administrator\"\nL59: - link \"Administrator\":\nL60:   - /url: /authors/admin\nL61: - text: 发布于 2026-09-20\nL62: - heading \"AI 测试 Agent 冒烟文章 001\" [level=1]:\nL63:   - link \"AI 测试 Agent 冒烟文章 001\":\nL64:     - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL65: - paragraph: 冒烟正文。\nL66: - link \"Administrator\":\nL67:   - /url: /authors/admin\nL68:   - img \"Administrator\"\nL69: - link \"Administrator\":\nL70:   - /url: /authors/admin\nL71: - text: 发布于 2026-09-20\nL72: - link \"默认分类\":\nL73:   - /url: /categories/default\nL74: - link \"#Halo\":\nL75:   - /url: /tags/halo\nL76: - heading \"Hello Halo\" [level=1]:\nL77:   - link \"Hello Halo\":\nL78:     - /url: /archives/hello-halo\nL79: - paragraph: 如果你看到了这一篇文章，那么证明你已经安装成功了，感谢使用 Halo 进行创作，希望能够使用愉快。\nL80: - link \"Administrator\":\nL81:   - /url: /authors/admin\nL82:   - img \"Administrator\"\nL83: - link \"Administrator\":\nL84:   - /url: /authors/admin\nL85: - text: 发布于 2026-09-19\nL86: - complementary:\nL87:   - heading \"热门文章\" [level=2]\nL88:   - list:\nL89:     - listitem:\nL90:       - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\nL91:         - link \"AI 测试 Agent 冒烟文章 001\":\nL92:           - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL93:       - paragraph: 2026-09-21 发布\nL94:       - text: \"0\"\nL95:     - listitem:\nL96:       - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\nL97:         - link \"AI 测试 Agent 冒烟文章 001\":\nL98:           - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL99:       - paragraph: 2026-09-21 发布\nL100:       - text: \"0\"\nL101:     - listitem:\nL102:       - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\nL103:         - link \"AI 测试 Agent 冒烟文章 001\":\nL104:           - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL105:       - paragraph: 2026-09-20 发布\nL106:       - text: \"0\"\nL107:     - listitem:\nL108:       - heading \"AI 测试 Agent 冒烟文章 001\" [level=3]:\nL109:         - link \"AI 测试 Agent 冒烟文章 001\":\nL110:           - /url: /archives/ai-ce-shi-agent-mou-yan-wen-zhang-001\nL111:       - paragraph: 2026-09-20 发布\nL112:       - text: \"0\"\nL113:     - listitem:\nL114:       - heading \"Hello Halo\" [level=3]:\nL115:         - link \"Hello Halo\":\nL116:           - /url: /archives/hello-halo\nL117:       - paragraph: 2026-09-19 发布\nL118:       - text: \"0\"\nL119:   - heading \"分类目录\" [level=2]\nL120:   - list:\nL121:     - listitem:\nL122:       - link \"默认分类 1\":\nL123:         - /url: /categories/default\nL124:   - heading \"标签\" [level=2]\nL125:   - link \"更多\":\nL126:     - /url: /tags\nL127:   - link \"#Halo 1\":\nL128:     - /url: /tags/halo\nL129:     - text: \"#Halo\"\nL130:     - superscript: \"1\"\nL131: - contentinfo:\nL132:   - link \"Agent 测试站 001\":\nL133:     - /url: /\nL134:   - separator\nL135:   - text: © 2026\nL136:   - link \"Agent 测试站 001\":\nL137:     - /url: /\nL138:   - text: . All Rights Reserved. Powered by\nL139:   - link \"Halo\":\nL140:     - /url: https://halo.run\nL141:   - text: .\nL142: - button \"回到顶部\"",
+    "notes": []
+  },
+  "step_summary": {
+    "total": 11,
+    "passed": 11,
+    "failed": 0,
+    "skipped": 0,
+    "failure_classes": {}
+  },
+  "judge": {
+    "verdict": "pass",
+    "reason": "步骤9 wait_for「保存成功」通过证明控制台出现保存成功提示，步骤11断言通过且最终快照多处出现新标题「Agent 测试站 001」，全部步骤通过，无失败或跳过。",
+    "evidence": [
+      {
+        "expected_index": 1,
+        "snapshot_line": 2,
+        "quote": "- link \"Agent 测试站 001\":"
+      },
+      {
+        "expected_index": 1,
+        "snapshot_line": 24,
+        "quote": "- text: Agent 测试站 001"
+      },
+      {
+        "expected_index": 1,
+        "snapshot_line": 132,
+        "quote": "- link \"Agent 测试站 001\":"
+      }
+    ],
+    "parsed": true
+  },
+  "artifacts": {
+    "run_dir": "runs/20260921T070352Z-change-site-title",
+    "calls_jsonl": "runs/20260921T070352Z-change-site-title/calls.jsonl",
+    "report_json": "reports/20260921T070352Z-change-site-title.json",
+    "report_md": "reports/20260921T070352Z-change-site-title.md"
+  }
+}

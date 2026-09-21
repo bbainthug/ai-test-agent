@@ -382,14 +382,25 @@ class Executor:
 
         if action == "assert_url":
             expected = render_template(step.url or "", variables)
-            current = page.url
-            ok = fnmatch.fnmatch(current, expected) if any(c in expected for c in "*?[") else (
-                expected in current
-            )
-            if not ok:
-                raise StepFailure(
-                    "assert_failed", f"断言失败: 期望 URL 包含/匹配 {expected!r}，实际 {current!r}"
+
+            def _url_ok(current: str) -> bool:
+                return (
+                    fnmatch.fnmatch(current, expected)
+                    if any(c in expected for c in "*?[")
+                    else expected in current
                 )
+
+            # URL 断言必须轮询等待：登录/跳转是异步的，立即读 page.url 有竞态
+            deadline = time.monotonic() + timeout_ms / 1000
+            current = page.url
+            while not _url_ok(current):
+                if time.monotonic() >= deadline:
+                    raise StepFailure(
+                        "assert_failed",
+                        f"断言失败: 期望 URL 包含/匹配 {expected!r}，实际 {current!r}（等待 {timeout_ms}ms）",
+                    )
+                page.wait_for_timeout(200)
+                current = page.url
             return None
 
         raise StepFailure("locator_failed", f"未知动作: {action}")  # schema 层已拦截，防御性兜底

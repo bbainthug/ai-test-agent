@@ -13,7 +13,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from .llm import LLMClient
+from .llm import LLMClient, LLMError
 from .schema import ACTIONS, Case
 
 PLANNER_SYSTEM_PROMPT = """你是资深测试工程师，为开源建站系统 Halo（本地运行）生成 e2e 自动化用例。
@@ -37,6 +37,9 @@ role=button[name="发布"] > label=用户名 > text=发布 > placeholder=搜索 
 - 前台首页: http://localhost:8090/
 - 控制台: http://localhost:8090/console/（登录后落地 /console/dashboard）
 - 登录页: http://localhost:8090/login（字段：用户名、密码；按钮文本"登录"）
+- 重要：登录成功后浏览器先跳到个人中心 /uc/profile，并不会直接进控制台；
+  要测控制台内功能，必须在登录步骤之后单独 goto 控制台地址。
+  不要在"登录"这一步之后直接断言 /console/dashboard。
 - 文章编辑器: http://localhost:8090/console/posts/editor（标题输入框 name 为"请输入标题"；
   正文为 contenteditable 区域；点"发布"后弹出"文章设置"对话框，需在对话框内再点"发布"）
 - 文章列表: http://localhost:8090/console/posts
@@ -56,6 +59,12 @@ role=button[name="发布"] > label=用户名 > text=发布 > placeholder=搜索 
   "expected": ["可观察的预期结果（中文，必须能在页面文本快照中验证）"]
 }
 注意：expected 必须是页面上可验证的现象（文本出现、元素可见、URL 变化），不要写"数据库正确"这类无法从 UI 验证的预期。
+
+## 稳定性红线（违反=用例作废）
+- 跳转断言一律优先 assert_url（用子串，如 /uc/profile）；URL 能证明的事不要用文本断言。
+- wait_for / assert_text 的 text 只能写你从"系统事实"里确认会渲染在页面上的文本；
+  想不出确定存在的文本就不要用文本等待，改用 URL 或元素断言。
+- 凭据只能用 {{ADMIN_USER}} / {{ADMIN_PASSWORD}} 占位符。
 """
 
 ALLOWED_ACTIONS_PROMPT = "、".join(ACTIONS)

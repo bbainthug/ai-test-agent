@@ -1,0 +1,291 @@
+{
+  "run_id": "20260921T070315Z-login-admin",
+  "created_at": "2026-09-21T07:03:34+00:00",
+  "target": {
+    "app": "halo",
+    "version": "registry.fit2cloud.com/halo/halo:2.20",
+    "base_url": "http://localhost:8090"
+  },
+  "llm": {
+    "model": "glm-5.3-flash",
+    "calls_total": 1,
+    "calls_failed": 0,
+    "prompt_tokens": 4411,
+    "completion_tokens": 720,
+    "total_tokens": 5131,
+    "latency_ms": 15512,
+    "by_phase": {
+      "judge": {
+        "calls": 1,
+        "total_tokens": 5131,
+        "latency_ms": 15512
+      }
+    },
+    "calls_file": "runs/20260921T070315Z-login-admin/calls.jsonl"
+  },
+  "case": {
+    "id": "login-admin",
+    "title": "管理员账号登录并进入控制台仪表盘",
+    "priority": "P0",
+    "preconditions": [
+      "Halo 已通过 scripts/up.sh 启动并初始化管理员账号（凭据在 .env）"
+    ],
+    "steps": [
+      {
+        "action": "goto",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "{{BASE_URL}}/login",
+        "timeout_ms": null
+      },
+      {
+        "action": "fill",
+        "selector": "role=textbox[name=\"用户名\"]",
+        "text": null,
+        "value": "{{ADMIN_USER}}",
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "fill",
+        "selector": "role=textbox[name=\"密码\"]",
+        "text": null,
+        "value": "{{ADMIN_PASSWORD}}",
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "click",
+        "selector": "role=button[name=\"登录\"]",
+        "text": null,
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "wait_for",
+        "selector": null,
+        "text": "Administrator",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "assert_url",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "/uc",
+        "timeout_ms": null
+      },
+      {
+        "action": "goto",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "{{BASE_URL}}/console/",
+        "timeout_ms": null
+      },
+      {
+        "action": "wait_for",
+        "selector": null,
+        "text": "仪表盘",
+        "value": null,
+        "url": null,
+        "timeout_ms": null
+      },
+      {
+        "action": "assert_url",
+        "selector": null,
+        "text": null,
+        "value": null,
+        "url": "/console/dashboard",
+        "timeout_ms": null
+      }
+    ],
+    "expected": [
+      "登录成功后跳转到个人中心（URL 包含 /uc）",
+      "管理员可进入控制台仪表盘（URL 包含 /console/dashboard，页面出现“仪表盘”）"
+    ],
+    "feature_id": null
+  },
+  "execution": {
+    "case_id": "login-admin",
+    "started_at": "2026-09-21T07:03:15+00:00",
+    "finished_at": "2026-09-21T07:03:18+00:00",
+    "final_url": "http://localhost:8090/console/dashboard",
+    "steps": [
+      {
+        "index": 1,
+        "action": "goto",
+        "params": {
+          "url": "{{BASE_URL}}/login"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 175,
+        "screenshot": "runs/20260921T070315Z-login-admin/shots/login-admin-step01-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\"\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\"\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 2,
+        "action": "fill",
+        "params": {
+          "selector": "role=textbox[name=\"用户名\"]",
+          "value": "{{ADMIN_USER}}"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 10,
+        "screenshot": "runs/20260921T070315Z-login-admin/shots/login-admin-step02-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\": admin\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\"\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 3,
+        "action": "fill",
+        "params": {
+          "selector": "role=textbox[name=\"密码\"]",
+          "value": "{{ADMIN_PASSWORD}}"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 19,
+        "screenshot": "runs/20260921T070315Z-login-admin/shots/login-admin-step03-passed.png",
+        "url_after": "http://localhost:8090/login",
+        "snapshot": "- img \"Halo\"\n- text: 用户名\n- textbox \"用户名\": admin\n- text: 密码\n- link \"忘记密码？\":\n  - /url: /password-reset/email\n- textbox \"密码\": ***\n- img\n- checkbox \"保持登录会话\"\n- text: 保持登录会话\n- button \"登录\"\n- link \"返回网站\":\n  - /url: /\n  - img\n  - text: 返回网站\n- img\n- combobox:\n  - option \"English\"\n  - option \"Español\"\n  - option \"简体中文\" [selected]\n  - option \"繁体中文\""
+      },
+      {
+        "index": 4,
+        "action": "click",
+        "params": {
+          "selector": "role=button[name=\"登录\"]"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 263,
+        "screenshot": "runs/20260921T070315Z-login-admin/shots/login-admin-step04-passed.png",
+        "url_after": "http://localhost:8090/uc/",
+        "snapshot": "(无法获取页面快照)"
+      },
+      {
+        "index": 5,
+        "action": "wait_for",
+        "params": {
+          "text": "Administrator"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 119,
+        "screenshot": "runs/20260921T070315Z-login-admin/shots/login-admin-step05-passed.png",
+        "url_after": "http://localhost:8090/uc/profile",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - list:\n    - listitem:\n      - img\n      - text: 我的\n    - listitem:\n      - img\n      - text: 消息\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /console\n    - img\n  - img\n- main:\n  - text: A\n  - img\n  - heading \"Administrator\" [level=1]\n  - text: \"@admin\"\n  - button \"编辑\"\n  - text: 详情 通知配置 个人令牌 两步验证 登录设备\n  - term: 显示名称\n  - definition: Administrator\n  - term: 用户名\n  - definition: admin\n  - term: 电子邮箱\n  - definition:\n    - text: agent-test@example.com\n    - img\n    - text: 验证电子邮箱 电子邮箱地址还未验证，点击下方按钮进行验证\n    - button \"验证\"\n  - term: 角色\n  - definition:\n    - img\n    - text: 超级管理员\n  - term: 描述\n  - definition: 无\n  - term: 注册时间\n  - definition: 2026-09-19 16:42\n  - text: Powered by\n  - link \"Halo\":\n    - /url: https://www.halo.run"
+      },
+      {
+        "index": 6,
+        "action": "assert_url",
+        "params": {
+          "url": "/uc"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 0,
+        "screenshot": "runs/20260921T070315Z-login-admin/shots/login-admin-step06-passed.png",
+        "url_after": "http://localhost:8090/uc/profile",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - list:\n    - listitem:\n      - img\n      - text: 我的\n    - listitem:\n      - img\n      - text: 消息\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /console\n    - img\n  - img\n- main:\n  - text: A\n  - img\n  - heading \"Administrator\" [level=1]\n  - text: \"@admin\"\n  - button \"编辑\"\n  - text: 详情 通知配置 个人令牌 两步验证 登录设备\n  - term: 显示名称\n  - definition: Administrator\n  - term: 用户名\n  - definition: admin\n  - term: 电子邮箱\n  - definition:\n    - text: agent-test@example.com\n    - img\n    - text: 验证电子邮箱 电子邮箱地址还未验证，点击下方按钮进行验证\n    - button \"验证\"\n  - term: 角色\n  - definition:\n    - img\n    - text: 超级管理员\n  - term: 描述\n  - definition: 无\n  - term: 注册时间\n  - definition: 2026-09-19 16:42\n  - text: Powered by\n  - link \"Halo\":\n    - /url: https://www.halo.run"
+      },
+      {
+        "index": 7,
+        "action": "goto",
+        "params": {
+          "url": "{{BASE_URL}}/console/"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 336,
+        "screenshot": "runs/20260921T070315Z-login-admin/shots/login-admin-step07-passed.png",
+        "url_after": "http://localhost:8090/console/",
+        "snapshot": "(无法获取页面快照)"
+      },
+      {
+        "index": 8,
+        "action": "wait_for",
+        "params": {
+          "text": "仪表盘"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 117,
+        "screenshot": "runs/20260921T070315Z-login-admin/shots/login-admin-step08-passed.png",
+        "url_after": "http://localhost:8090/console/dashboard",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - img\n  - text: 搜索 ⌘+K\n  - list:\n    - listitem:\n      - img\n      - text: 仪表盘\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n    - listitem:\n      - img\n      - text: 页面\n    - listitem:\n      - img\n      - text: 评论\n    - listitem:\n      - img\n      - text: 附件\n    - listitem: 外观\n    - listitem:\n      - img\n      - text: 主题\n    - listitem:\n      - img\n      - text: 菜单\n    - listitem: 系统\n    - listitem:\n      - img\n      - text: 插件\n    - listitem:\n      - img\n      - text: 用户\n    - listitem:\n      - img\n      - text: 设置\n    - listitem:\n      - img\n      - text: 概览\n    - listitem:\n      - img\n      - text: 备份\n    - listitem:\n      - img\n      - text: 工具\n    - listitem:\n      - img\n      - text: 应用市场\n      - img\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /uc\n    - img\n  - img\n- main:\n  - heading \"仪表板\" [level=2]:\n    - img\n    - text: 仪表板\n  - button \"设置\":\n    - img\n    - text: 设置\n  - img\n  - text: 文章\n  - paragraph: \"6\"\n  - img\n  - text: 用户\n  - paragraph: \"1\"\n  - img\n  - text: 评论\n  - paragraph: \"0\"\n  - img\n  - text: 浏览量\n  - paragraph: \"0\"\n  - text: 快捷访问\n  - img\n  - heading \"个人中心\" [level=3]\n  - img\n  - heading \"查看站点\" [level=3]\n  - img\n  - heading \"创建文章\" [level=3]\n  - img\n  - heading \"创建页面\" [level=3]\n  - img\n  - heading \"附件上传\" [level=3]\n  - img\n  - heading \"主题管理\" [level=3]\n  - img\n  - heading \"插件管理\" [level=3]\n  - img\n  - heading \"新建用户\" [level=3]\n  - img\n  - heading \"刷新搜索引擎\" [level=3]\n  - text: 通知\n  - link \"查看全部\":\n    - /url: /uc/notifications\n  - list:\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 15:03:17 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 几秒前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 15:02:17 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:57:17 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 6 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:54:49 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 8 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:49:14 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 14 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:48:00 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 15 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:47:39 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 16 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:47:20 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 16 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:17:08 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:16:06 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:16:02 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:15:59 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:13:00 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:12:19 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:10:52 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:09:28 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:07:39 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:02:50 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相\n… [TRUNCATED]"
+      },
+      {
+        "index": 9,
+        "action": "assert_url",
+        "params": {
+          "url": "/console/dashboard"
+        },
+        "status": "passed",
+        "failure_class": null,
+        "error": null,
+        "elapsed_ms": 0,
+        "screenshot": "runs/20260921T070315Z-login-admin/shots/login-admin-step09-passed.png",
+        "url_after": "http://localhost:8090/console/dashboard",
+        "snapshot": "- complementary:\n  - link \"访问首页\":\n    - /url: /\n    - img\n  - img\n  - text: 搜索 ⌘+K\n  - list:\n    - listitem:\n      - img\n      - text: 仪表盘\n    - listitem: 内容\n    - listitem:\n      - img\n      - text: 文章\n    - listitem:\n      - img\n      - text: 页面\n    - listitem:\n      - img\n      - text: 评论\n    - listitem:\n      - img\n      - text: 附件\n    - listitem: 外观\n    - listitem:\n      - img\n      - text: 主题\n    - listitem:\n      - img\n      - text: 菜单\n    - listitem: 系统\n    - listitem:\n      - img\n      - text: 插件\n    - listitem:\n      - img\n      - text: 用户\n    - listitem:\n      - img\n      - text: 设置\n    - listitem:\n      - img\n      - text: 概览\n    - listitem:\n      - img\n      - text: 备份\n    - listitem:\n      - img\n      - text: 工具\n    - listitem:\n      - img\n      - text: 应用市场\n      - img\n  - text: Administrator\n  - img\n  - text: 超级管理员\n  - link:\n    - /url: /uc\n    - img\n  - img\n- main:\n  - heading \"仪表板\" [level=2]:\n    - img\n    - text: 仪表板\n  - button \"设置\":\n    - img\n    - text: 设置\n  - img\n  - text: 文章\n  - paragraph: \"6\"\n  - img\n  - text: 用户\n  - paragraph: \"1\"\n  - img\n  - text: 评论\n  - paragraph: \"0\"\n  - img\n  - text: 浏览量\n  - paragraph: \"0\"\n  - text: 快捷访问\n  - img\n  - heading \"个人中心\" [level=3]\n  - img\n  - heading \"查看站点\" [level=3]\n  - img\n  - heading \"创建文章\" [level=3]\n  - img\n  - heading \"创建页面\" [level=3]\n  - img\n  - heading \"附件上传\" [level=3]\n  - img\n  - heading \"主题管理\" [level=3]\n  - img\n  - heading \"插件管理\" [level=3]\n  - img\n  - heading \"新建用户\" [level=3]\n  - img\n  - heading \"刷新搜索引擎\" [level=3]\n  - text: 通知\n  - link \"查看全部\":\n    - /url: /uc/notifications\n  - list:\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 15:03:17 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 几秒前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 15:02:17 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:57:17 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 6 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:54:49 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 8 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:49:14 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 14 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:48:00 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 15 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:47:39 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 16 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:47:20 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 16 分钟前\n    - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:17:08 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:16:06 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:16:02 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:15:59 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:13:00 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:12:19 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:10:52 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:09:28 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:07:39 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\n    - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:02:50 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相\n… [TRUNCATED]"
+      }
+    ],
+    "final_snapshot_numbered": "L1: - complementary:\nL2:   - link \"访问首页\":\nL3:     - /url: /\nL4:     - img\nL5:   - img\nL6:   - text: 搜索 ⌘+K\nL7:   - list:\nL8:     - listitem:\nL9:       - img\nL10:       - text: 仪表盘\nL11:     - listitem: 内容\nL12:     - listitem:\nL13:       - img\nL14:       - text: 文章\nL15:     - listitem:\nL16:       - img\nL17:       - text: 页面\nL18:     - listitem:\nL19:       - img\nL20:       - text: 评论\nL21:     - listitem:\nL22:       - img\nL23:       - text: 附件\nL24:     - listitem: 外观\nL25:     - listitem:\nL26:       - img\nL27:       - text: 主题\nL28:     - listitem:\nL29:       - img\nL30:       - text: 菜单\nL31:     - listitem: 系统\nL32:     - listitem:\nL33:       - img\nL34:       - text: 插件\nL35:     - listitem:\nL36:       - img\nL37:       - text: 用户\nL38:     - listitem:\nL39:       - img\nL40:       - text: 设置\nL41:     - listitem:\nL42:       - img\nL43:       - text: 概览\nL44:     - listitem:\nL45:       - img\nL46:       - text: 备份\nL47:     - listitem:\nL48:       - img\nL49:       - text: 工具\nL50:     - listitem:\nL51:       - img\nL52:       - text: 应用市场\nL53:       - img\nL54:   - text: Administrator\nL55:   - img\nL56:   - text: 超级管理员\nL57:   - link:\nL58:     - /url: /uc\nL59:     - img\nL60:   - img\nL61: - main:\nL62:   - heading \"仪表板\" [level=2]:\nL63:     - img\nL64:     - text: 仪表板\nL65:   - button \"设置\":\nL66:     - img\nL67:     - text: 设置\nL68:   - img\nL69:   - text: 文章\nL70:   - paragraph: \"6\"\nL71:   - img\nL72:   - text: 用户\nL73:   - paragraph: \"1\"\nL74:   - img\nL75:   - text: 评论\nL76:   - paragraph: \"0\"\nL77:   - img\nL78:   - text: 浏览量\nL79:   - paragraph: \"0\"\nL80:   - text: 快捷访问\nL81:   - img\nL82:   - heading \"个人中心\" [level=3]\nL83:   - img\nL84:   - heading \"查看站点\" [level=3]\nL85:   - img\nL86:   - heading \"创建文章\" [level=3]\nL87:   - img\nL88:   - heading \"创建页面\" [level=3]\nL89:   - img\nL90:   - heading \"附件上传\" [level=3]\nL91:   - img\nL92:   - heading \"主题管理\" [level=3]\nL93:   - img\nL94:   - heading \"插件管理\" [level=3]\nL95:   - img\nL96:   - heading \"新建用户\" [level=3]\nL97:   - img\nL98:   - heading \"刷新搜索引擎\" [level=3]\nL99:   - text: 通知\nL100:   - link \"查看全部\":\nL101:     - /url: /uc/notifications\nL102:   - list:\nL103:     - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 15:03:17 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 几秒前\nL104:     - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 15:02:17 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 分钟前\nL105:     - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:57:17 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 6 分钟前\nL106:     - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:54:49 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 8 分钟前\nL107:     - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:49:14 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 14 分钟前\nL108:     - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:48:00 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 15 分钟前\nL109:     - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:47:39 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 16 分钟前\nL110:     - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-21 14:47:20 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 16 分钟前\nL111:     - listitem: 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 001 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:17:08 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\nL112:     - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:16:06 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\nL113:     - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:16:02 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\nL114:     - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:15:59 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\nL115:     - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:13:00 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\nL116:     - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:12:19 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\nL117:     - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:10:52 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\nL118:     - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:09:28 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\nL119:     - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:07:39 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\nL120:     - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:02:50 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\nL121:     - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:01:00 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\nL122:     - listitem: 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 上登录 @admin 你好： 你的 Agent 测试站 账号被用于在 Mac OS X 10.15.7 的 Chrome 153.0 上登录。 时间：2026-09-20 17:00:04 GMT+8 IP 地址：172.17.0.1 如果你知悉上述信息，请忽略此电子邮件。 如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。 1 天前\nL123:   - text: Powered by\nL124:   - link \"Halo\":\nL125:     - /url: /console/overview",
+    "notes": []
+  },
+  "step_summary": {
+    "total": 9,
+    "passed": 9,
+    "failed": 0,
+    "skipped": 0,
+    "failure_classes": {}
+  },
+  "judge": {
+    "verdict": "pass",
+    "reason": "全部步骤通过：assert_url /uc 与 /console/dashboard 均成功，快照中存在 Administrator 与 仪表盘 文本，两条预期均有证据支持",
+    "evidence": [
+      {
+        "expected_index": 0,
+        "snapshot_line": 58,
+        "quote": "- /url: /uc"
+      },
+      {
+        "expected_index": 0,
+        "snapshot_line": 54,
+        "quote": "- text: Administrator"
+      },
+      {
+        "expected_index": 1,
+        "snapshot_line": 10,
+        "quote": "text: 仪表盘"
+      },
+      {
+        "expected_index": 1,
+        "snapshot_line": 62,
+        "quote": "- heading \"仪表板\" [level=2]:"
+      }
+    ],
+    "parsed": true
+  },
+  "artifacts": {
+    "run_dir": "runs/20260921T070315Z-login-admin",
+    "calls_jsonl": "runs/20260921T070315Z-login-admin/calls.jsonl",
+    "report_json": "reports/20260921T070315Z-login-admin.json",
+    "report_md": "reports/20260921T070315Z-login-admin.md"
+  }
+}
