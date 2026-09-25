@@ -40,7 +40,9 @@ ActionName = Literal[
 ASSERT_ACTIONS = frozenset({"assert_text", "assert_visible", "assert_url"})
 
 # 用例 JSON 中允许的模板变量（executor 渲染，报告写回占位符原文以避免泄密）
-TEMPLATE_VARS = frozenset({"BASE_URL", "ADMIN_USER", "ADMIN_PASSWORD"})
+# RUN_ID：每次执行唯一的短串，用于必须唯一的测试数据（分类别名、标签别名等），
+# 让同一条用例可以重复执行而不因"已存在"失败（测试数据隔离）
+TEMPLATE_VARS = frozenset({"BASE_URL", "ADMIN_USER", "ADMIN_PASSWORD", "RUN_ID"})
 
 _ID_RE = re.compile(r"^[a-z0-9][a-z0-9_-]{1,63}$")
 

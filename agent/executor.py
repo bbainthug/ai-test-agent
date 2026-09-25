@@ -23,6 +23,7 @@ from __future__ import annotations
 import fnmatch
 import re
 import time
+import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
@@ -108,6 +109,7 @@ class ExecutionResult:
     api_calls: dict[str, int] = field(default_factory=dict)  # "METHOD /path" -> 次数
     faults: list[Fault] = field(default_factory=list)
     faults_hit: int = 0  # 故障被实际触发的次数（0 表示用例没碰到被注入故障的功能）
+    probe_hits: int = 0  # 探针命中次数：不注入故障，只统计是否请求到了目标功能的接口
 
     def to_dict(self) -> dict:
         return {
@@ -121,6 +123,7 @@ class ExecutionResult:
             "api_calls": self.api_calls,
             "faults": [f.to_dict() for f in self.faults],
             "faults_hit": self.faults_hit,
+            "probe_hits": self.probe_hits,
         }
 
     @property
@@ -183,10 +186,18 @@ def resolve_locator(page: Page, selector: str) -> tuple[Locator, str]:
 
 class Executor:
     def __init__(
-        self, settings: Settings, run_dir: Path, faults: list[Fault] | None = None
+        self,
+        settings: Settings,
+        run_dir: Path,
+        faults: list[Fault] | None = None,
+        probes: list[Fault] | None = None,
     ) -> None:
         self.settings = settings
         self.faults = list(faults or [])
+        # 探针：与 Fault 同样的匹配规则，但只计数不拦截（判断用例是否覆盖了目标功能）
+        self.probes = [(re.compile(p.url_regex), p.method) for p in (probes or [])]
+        # 每个执行器实例一个唯一短串，渲染 {{RUN_ID}}（小写字母数字，可直接用作别名）
+        self.run_token = uuid.uuid4().hex[:8]
         self.run_dir = Path(run_dir)
         self.shots_dir = self.run_dir / "shots"
         self.shots_dir.mkdir(parents=True, exist_ok=True)
@@ -237,6 +248,12 @@ class Executor:
 
             context.route(pattern, handler)
 
+    def _probe(self, result: ExecutionResult, request) -> None:
+        for pattern, method in self.probes:
+            if pattern.search(request.url) and (not method or request.method.upper() == method.upper()):
+                result.probe_hits += 1
+                return
+
     @staticmethod
     def _record_api(result: ExecutionResult, request) -> None:
         m = _API_PATH_RE.match(request.url)
@@ -251,7 +268,7 @@ class Executor:
             case_id=case.id, started_at=started, finished_at=started, final_url="",
             faults=list(self.faults),
         )
-        variables = self.settings.template_vars()
+        variables = {**self.settings.template_vars(), "RUN_ID": self.run_token}
 
         with sync_playwright() as p:
             browser = self._launch(p, self.settings.headless)
@@ -259,6 +276,8 @@ class Executor:
             self._block_external(context)
             self._install_faults(context, result)
             context.on("request", lambda req: self._record_api(result, req))
+            if self.probes:
+                context.on("request", lambda req: self._probe(result, req))
             page = context.new_page()
             try:
                 for idx, step in enumerate(case.steps, start=1):

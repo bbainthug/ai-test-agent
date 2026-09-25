@@ -45,6 +45,8 @@ role=button[name="发布"] > label=用户名 > text=发布 > placeholder=搜索 
 - 文章列表: http://localhost:8090/console/posts
 - 站点设置: http://localhost:8090/console/settings（含"站点标题"输入框与"保存"按钮）
 - 管理员凭据是机密，用户名一律写 {{ADMIN_USER}}，密码一律写 {{ADMIN_PASSWORD}}，禁止编造真实凭据。
+- 新建的数据（分类、标签、文章等）名称和别名要带 {{RUN_ID}}（每次执行唯一，如 "测试分类-{{RUN_ID}}"），
+  否则重复执行会因"已存在"失败；断言时同样写带 {{RUN_ID}} 的名称。
 - 断言入口 URL 时用子串（如 /console/dashboard），不要写完整带参数的地址。
 
 ## 输出格式

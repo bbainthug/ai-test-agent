@@ -13,6 +13,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import threading
 import time
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
@@ -45,6 +46,9 @@ class CallRecord:
     error: str | None
 
 
+_LOG_LOCK = threading.Lock()
+
+
 class LLMClient:
     def __init__(
         self,
@@ -70,7 +74,8 @@ class LLMClient:
     # ------------------------------------------------------------------ #
 
     def _log(self, rec: CallRecord) -> None:
-        with self.calls_path.open("a", encoding="utf-8") as f:
+        # 同一个客户端可能被多个线程同时使用（基准里两种裁判并发），写审计日志要串行
+        with _LOG_LOCK, self.calls_path.open("a", encoding="utf-8") as f:
             f.write(json.dumps(asdict(rec), ensure_ascii=False) + "\n")
 
     @staticmethod

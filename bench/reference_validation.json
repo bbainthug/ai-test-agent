@@ -1,0 +1,455 @@
+{
+ "login": {
+  "healthy_steps": {
+   "passed": 6,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 4,
+   "failed": 1,
+   "skipped": 1
+  },
+  "fault_hit": 1,
+  "fault_detected": true,
+  "fault_failed_at": [
+   5,
+   "timeout"
+  ],
+  "valid": true
+ },
+ "post-list": {
+  "healthy_steps": {
+   "passed": 7,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 6,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 4,
+  "fault_detected": true,
+  "fault_failed_at": [
+   7,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "publish-post": {
+  "healthy_steps": {
+   "passed": 14,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [
+   "POST /apis/api.console.halo.run/v1alpha1/posts",
+   "PUT /apis/api.console.halo.run/v1alpha1/posts/f34a4b52-0e84-4a3e-a7cf-51fe35d07fb3/publish"
+  ],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 11,
+   "failed": 1,
+   "skipped": 2
+  },
+  "fault_hit": 1,
+  "fault_detected": true,
+  "fault_failed_at": [
+   12,
+   "timeout"
+  ],
+  "valid": true
+ },
+ "site-title": {
+  "healthy_steps": {
+   "passed": 11,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [
+   "PUT /api/v1alpha1/configmaps/system"
+  ],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 8,
+   "failed": 1,
+   "skipped": 2
+  },
+  "fault_hit": 1,
+  "fault_detected": true,
+  "fault_failed_at": [
+   9,
+   "timeout"
+  ],
+  "valid": true
+ },
+ "category-list": {
+  "healthy_steps": {
+   "passed": 7,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 6,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 4,
+  "fault_detected": true,
+  "fault_failed_at": [
+   7,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "create-category": {
+  "healthy_steps": {
+   "passed": 12,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [
+   "POST /apis/content.halo.run/v1alpha1/categories"
+  ],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 10,
+   "failed": 1,
+   "skipped": 1
+  },
+  "fault_hit": 1,
+  "fault_detected": true,
+  "fault_failed_at": [
+   11,
+   "timeout"
+  ],
+  "valid": true
+ },
+ "tag-list": {
+  "healthy_steps": {
+   "passed": 7,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 6,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 4,
+  "fault_detected": true,
+  "fault_failed_at": [
+   7,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "create-tag": {
+  "healthy_steps": {
+   "passed": 12,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [
+   "POST /apis/content.halo.run/v1alpha1/tags"
+  ],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 10,
+   "failed": 1,
+   "skipped": 1
+  },
+  "fault_hit": 1,
+  "fault_detected": true,
+  "fault_failed_at": [
+   11,
+   "timeout"
+  ],
+  "valid": true
+ },
+ "page-list": {
+  "healthy_steps": {
+   "passed": 7,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 6,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 4,
+  "fault_detected": true,
+  "fault_failed_at": [
+   7,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "menu-items": {
+  "healthy_steps": {
+   "passed": 7,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 6,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 4,
+  "fault_detected": true,
+  "fault_failed_at": [
+   7,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "plugin-list": {
+  "healthy_steps": {
+   "passed": 7,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 6,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 4,
+  "fault_detected": true,
+  "fault_failed_at": [
+   7,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "user-list": {
+  "healthy_steps": {
+   "passed": 7,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 6,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 4,
+  "fault_detected": true,
+  "fault_failed_at": [
+   7,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "role-list": {
+  "healthy_steps": {
+   "passed": 7,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 6,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 4,
+  "fault_detected": true,
+  "fault_failed_at": [
+   7,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "search-posts": {
+  "healthy_steps": {
+   "passed": 8,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 7,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 4,
+  "fault_detected": true,
+  "fault_failed_at": [
+   8,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "home-posts": {
+  "healthy_steps": {
+   "passed": 2,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 1,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 1,
+  "fault_detected": true,
+  "fault_failed_at": [
+   2,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "archives-page": {
+  "healthy_steps": {
+   "passed": 2,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 1,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 1,
+  "fault_detected": true,
+  "fault_failed_at": [
+   2,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "tags-page": {
+  "healthy_steps": {
+   "passed": 2,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 1,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 1,
+  "fault_detected": true,
+  "fault_failed_at": [
+   2,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "notification-list": {
+  "healthy_steps": {
+   "passed": 7,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 6,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 4,
+  "fault_detected": true,
+  "fault_failed_at": [
+   7,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "post-detail": {
+  "healthy_steps": {
+   "passed": 2,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [
+   "POST /apis/api.halo.run/v1alpha1/trackers/counter"
+  ],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 1,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 1,
+  "fault_detected": true,
+  "fault_failed_at": [
+   2,
+   "assert_failed"
+  ],
+  "valid": true
+ },
+ "about-page": {
+  "healthy_steps": {
+   "passed": 2,
+   "failed": 0,
+   "skipped": 0
+  },
+  "healthy_ok": true,
+  "healthy_writes": [
+   "POST /apis/api.halo.run/v1alpha1/trackers/counter"
+  ],
+  "healthy_failed_at": null,
+  "fault_steps": {
+   "passed": 1,
+   "failed": 1,
+   "skipped": 0
+  },
+  "fault_hit": 1,
+  "fault_detected": true,
+  "fault_failed_at": [
+   2,
+   "assert_failed"
+  ],
+  "valid": true
+ }
+}

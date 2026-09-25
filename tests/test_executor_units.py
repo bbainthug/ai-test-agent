@@ -89,3 +89,35 @@ def test_fault_serialization():
     r = ExecutionResult(case_id="c", started_at="", finished_at="", final_url="", faults=[f])
     assert r.to_dict()["faults"] == [f.to_dict()]
     assert r.to_dict()["faults_hit"] == 0
+
+
+def test_run_token_unique_per_executor(tmp_path):
+    class S:  # 最小 settings 替身
+        pass
+
+    a = Executor(S(), tmp_path / "a")
+    b = Executor(S(), tmp_path / "b")
+    assert a.run_token != b.run_token and len(a.run_token) == 8 and a.run_token.isalnum()
+
+
+def test_run_id_is_allowed_template_var():
+    from agent.schema import Step
+
+    Step.model_validate({"action": "fill", "selector": "label=别名 *", "value": "tag-{{RUN_ID}}"})
+
+
+def test_probe_counts_matching_requests_without_intercepting(tmp_path):
+    class S:
+        pass
+
+    ex = Executor(S(), tmp_path / "p", probes=[Fault(r"/v1alpha1/posts/[^/]+/publish", method="PUT")])
+    r = ExecutionResult(case_id="c", started_at="", finished_at="", final_url="")
+
+    class Req:
+        def __init__(self, method, url):
+            self.method, self.url = method, url
+
+    ex._probe(r, Req("PUT", "http://h/apis/api.console.halo.run/v1alpha1/posts/abc/publish"))
+    ex._probe(r, Req("GET", "http://h/apis/api.console.halo.run/v1alpha1/posts/abc/publish"))
+    ex._probe(r, Req("PUT", "http://h/apis/api.console.halo.run/v1alpha1/tags"))
+    assert r.probe_hits == 1 and r.faults_hit == 0

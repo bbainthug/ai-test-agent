@@ -1,0 +1,1096 @@
+{
+ "target": "halo 2.20 (theme-earth)",
+ "features": [
+  {
+   "id": "login",
+   "title": "管理员登录",
+   "description": "管理员在登录页输入账号密码登录，登录成功后进入个人中心",
+   "priority": "P0",
+   "fault": {
+    "url_regex": "/login(\\?|$)",
+    "method": "POST",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-login",
+    "title": "管理员登录",
+    "priority": "P0",
+    "feature_id": "login",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "assert_url",
+      "url": "/uc"
+     }
+    ],
+    "expected": [
+     "登录后跳转到个人中心（URL 包含 /uc）",
+     "页面显示当前用户 Administrator"
+    ]
+   }
+  },
+  {
+   "id": "notification-list",
+   "title": "个人中心通知",
+   "description": "登录后打开个人中心的通知页，能看到账号登录提醒等通知",
+   "priority": "P2",
+   "fault": {
+    "url_regex": "/apis/api\\.notification\\.halo\\.run/v1alpha1/userspaces/[^/]+/notifications(\\?|$)",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-notification-list",
+    "title": "个人中心通知",
+    "priority": "P2",
+    "feature_id": "notification-list",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/uc/notifications"
+     },
+     {
+      "action": "assert_text",
+      "text": "账号被用于"
+     }
+    ],
+    "expected": [
+     "通知列表显示账号登录提醒"
+    ]
+   }
+  },
+  {
+   "id": "post-list",
+   "title": "文章列表",
+   "description": "登录后打开文章管理页，能看到已发布的文章列表",
+   "priority": "P1",
+   "fault": {
+    "url_regex": "/apis/api.console.halo.run/v1alpha1/posts(\\?|$)",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-post-list",
+    "title": "文章列表",
+    "priority": "P1",
+    "feature_id": "post-list",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/console/posts"
+     },
+     {
+      "action": "assert_text",
+      "text": "AI 测试 Agent 冒烟文章 001"
+     }
+    ],
+    "expected": [
+     "文章列表中出现已发布文章「AI 测试 Agent 冒烟文章 001」"
+    ]
+   }
+  },
+  {
+   "id": "publish-post",
+   "title": "新建并发布文章",
+   "description": "登录后在文章编辑器新建一篇文章并发布，发布后前台首页能看到这篇文章",
+   "priority": "P0",
+   "fault": {
+    "url_regex": "/apis/api\\.console\\.halo\\.run/v1alpha1/posts/[^/]+/publish",
+    "method": "PUT",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-publish-post",
+    "title": "新建并发布文章",
+    "priority": "P0",
+    "feature_id": "publish-post",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/console/posts/editor"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"请输入标题\"]",
+      "value": "基准文章 {{RUN_ID}}"
+     },
+     {
+      "action": "fill",
+      "selector": "[contenteditable=\"true\"]",
+      "value": "基准测试自动创建的文章。"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"发布\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "文章设置"
+     },
+     {
+      "action": "click",
+      "selector": "role=dialog >> role=button[name=\"发布\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "发布成功"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/"
+     },
+     {
+      "action": "assert_text",
+      "text": "基准文章 {{RUN_ID}}"
+     }
+    ],
+    "expected": [
+     "控制台提示发布成功",
+     "前台首页出现新文章标题"
+    ]
+   }
+  },
+  {
+   "id": "site-title",
+   "title": "修改站点标题",
+   "description": "登录后在系统设置里修改站点标题并保存，前台首页显示新标题",
+   "priority": "P1",
+   "fault": {
+    "url_regex": "/api/v1alpha1/configmaps/system",
+    "method": "PUT",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-site-title",
+    "title": "修改站点标题",
+    "priority": "P1",
+    "feature_id": "site-title",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/console/settings"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"站点标题\"]",
+      "value": "Agent 测试站 001"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"保存\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "保存成功"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/"
+     },
+     {
+      "action": "assert_text",
+      "text": "Agent 测试站 001"
+     }
+    ],
+    "expected": [
+     "控制台提示保存成功",
+     "前台首页显示站点标题「Agent 测试站 001」"
+    ]
+   }
+  },
+  {
+   "id": "category-list",
+   "title": "分类列表",
+   "description": "登录后打开文章分类管理页，能看到已有分类",
+   "priority": "P1",
+   "fault": {
+    "url_regex": "/apis/content\\.halo\\.run/v1alpha1/categories(\\?|$)",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-category-list",
+    "title": "分类列表",
+    "priority": "P1",
+    "feature_id": "category-list",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/console/posts/categories"
+     },
+     {
+      "action": "assert_text",
+      "text": "/categories/default"
+     }
+    ],
+    "expected": [
+     "分类列表显示默认分类（/categories/default）"
+    ]
+   }
+  },
+  {
+   "id": "create-category",
+   "title": "新建分类",
+   "description": "登录后在文章分类管理页新建一个分类并提交，新分类出现在列表中",
+   "priority": "P1",
+   "fault": {
+    "url_regex": "/apis/content\\.halo\\.run/v1alpha1/categories(\\?|$)",
+    "method": "POST",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-create-category",
+    "title": "新建分类",
+    "priority": "P1",
+    "feature_id": "create-category",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/console/posts/categories"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"新建\"]"
+     },
+     {
+      "action": "fill",
+      "selector": "role=dialog >> role=textbox[name=\"名称 *\"]",
+      "value": "基准分类 {{RUN_ID}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=dialog >> role=textbox[name=\"别名 *\"]",
+      "value": "bench-cat-{{RUN_ID}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"提交（⌘ + ↵）\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "保存成功"
+     },
+     {
+      "action": "assert_text",
+      "text": "基准分类 {{RUN_ID}}"
+     }
+    ],
+    "expected": [
+     "提示保存成功",
+     "分类列表中出现新分类"
+    ]
+   }
+  },
+  {
+   "id": "tag-list",
+   "title": "标签列表",
+   "description": "登录后打开文章标签管理页，能看到已有标签",
+   "priority": "P1",
+   "fault": {
+    "url_regex": "/apis/api.console.halo.run/v1alpha1/tags(\\?|$)",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-tag-list",
+    "title": "标签列表",
+    "priority": "P1",
+    "feature_id": "tag-list",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/console/posts/tags"
+     },
+     {
+      "action": "assert_text",
+      "text": "/tags/halo"
+     }
+    ],
+    "expected": [
+     "标签列表显示 Halo 标签（/tags/halo）"
+    ]
+   }
+  },
+  {
+   "id": "create-tag",
+   "title": "新建标签",
+   "description": "登录后在文章标签管理页新建一个标签并提交，新标签出现在列表中",
+   "priority": "P1",
+   "fault": {
+    "url_regex": "/apis/content\\.halo\\.run/v1alpha1/tags(\\?|$)",
+    "method": "POST",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-create-tag",
+    "title": "新建标签",
+    "priority": "P1",
+    "feature_id": "create-tag",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/console/posts/tags"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"新建\"]"
+     },
+     {
+      "action": "fill",
+      "selector": "role=dialog >> role=textbox[name=\"名称 *\"]",
+      "value": "基准标签 {{RUN_ID}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=dialog >> role=textbox[name=\"别名 *\"]",
+      "value": "bench-tag-{{RUN_ID}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"提交（⌘ + ↵）\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "保存成功"
+     },
+     {
+      "action": "assert_text",
+      "text": "基准标签 {{RUN_ID}}"
+     }
+    ],
+    "expected": [
+     "提示保存成功",
+     "标签列表中出现新标签"
+    ]
+   }
+  },
+  {
+   "id": "page-list",
+   "title": "页面列表",
+   "description": "登录后打开页面管理，能看到已有的自定义页面",
+   "priority": "P1",
+   "fault": {
+    "url_regex": "/apis/api.console.halo.run/v1alpha1/singlepages(\\?|$)",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-page-list",
+    "title": "页面列表",
+    "priority": "P1",
+    "feature_id": "page-list",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/console/single-pages"
+     },
+     {
+      "action": "assert_visible",
+      "selector": "role=link[name=\"关于\"]"
+     }
+    ],
+    "expected": [
+     "页面列表显示「关于」页面"
+    ]
+   }
+  },
+  {
+   "id": "post-detail",
+   "title": "前台文章详情",
+   "description": "访客打开一篇已发布文章的详情页，能看到文章正文",
+   "priority": "P1",
+   "fault": {
+    "url_regex": "^http://localhost:8090/archives/hello-halo(\\?.*)?$",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-post-detail",
+    "title": "前台文章详情",
+    "priority": "P1",
+    "feature_id": "post-detail",
+    "preconditions": [],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/archives/hello-halo"
+     },
+     {
+      "action": "assert_text",
+      "text": "如果你看到了这一篇文章"
+     }
+    ],
+    "expected": [
+     "文章详情页显示《Hello Halo》正文"
+    ]
+   }
+  },
+  {
+   "id": "about-page",
+   "title": "前台关于页",
+   "description": "访客打开「关于」页面，能看到页面内容",
+   "priority": "P2",
+   "fault": {
+    "url_regex": "^http://localhost:8090/about(\\?.*)?$",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-about-page",
+    "title": "前台关于页",
+    "priority": "P2",
+    "feature_id": "about-page",
+    "preconditions": [],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/about"
+     },
+     {
+      "action": "assert_text",
+      "text": "关于"
+     }
+    ],
+    "expected": [
+     "关于页面正常显示"
+    ]
+   }
+  },
+  {
+   "id": "menu-items",
+   "title": "菜单项",
+   "description": "登录后打开菜单管理，能看到主菜单下的菜单项",
+   "priority": "P1",
+   "fault": {
+    "url_regex": "/api/v1alpha1/menuitems(\\?|$)",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-menu-items",
+    "title": "菜单项",
+    "priority": "P1",
+    "feature_id": "menu-items",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/console/menus"
+     },
+     {
+      "action": "assert_text",
+      "text": "/archives/hello-halo"
+     }
+    ],
+    "expected": [
+     "主菜单下显示菜单项（含 Hello Halo 文章链接）"
+    ]
+   }
+  },
+  {
+   "id": "plugin-list",
+   "title": "插件列表",
+   "description": "登录后打开插件管理，能看到已安装的插件",
+   "priority": "P1",
+   "fault": {
+    "url_regex": "/apis/api.console.halo.run/v1alpha1/plugins(\\?|$)",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-plugin-list",
+    "title": "插件列表",
+    "priority": "P1",
+    "feature_id": "plugin-list",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/console/plugins"
+     },
+     {
+      "action": "assert_text",
+      "text": "搜索组件"
+     }
+    ],
+    "expected": [
+     "插件列表显示已安装的「搜索组件」插件"
+    ]
+   }
+  },
+  {
+   "id": "user-list",
+   "title": "用户列表",
+   "description": "登录后打开用户管理，能看到管理员账号",
+   "priority": "P1",
+   "fault": {
+    "url_regex": "/apis/api.console.halo.run/v1alpha1/users(\\?|$)",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-user-list",
+    "title": "用户列表",
+    "priority": "P1",
+    "feature_id": "user-list",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/console/users"
+     },
+     {
+      "action": "assert_visible",
+      "selector": "role=link[name=\"Administrator\"]"
+     }
+    ],
+    "expected": [
+     "用户列表中出现 Administrator 账号"
+    ]
+   }
+  },
+  {
+   "id": "role-list",
+   "title": "角色列表",
+   "description": "登录后打开角色管理，能看到系统内置角色",
+   "priority": "P1",
+   "fault": {
+    "url_regex": "/api/v1alpha1/roles(\\?|$)",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-role-list",
+    "title": "角色列表",
+    "priority": "P1",
+    "feature_id": "role-list",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/console/users/roles"
+     },
+     {
+      "action": "assert_text",
+      "text": "文章管理员"
+     }
+    ],
+    "expected": [
+     "角色列表显示系统内置角色（如 文章管理员）"
+    ]
+   }
+  },
+  {
+   "id": "search-posts",
+   "title": "按关键词搜索文章",
+   "description": "登录后在文章管理页的搜索框输入关键词，列表只显示匹配的文章",
+   "priority": "P2",
+   "fault": {
+    "url_regex": "/apis/api.console.halo.run/v1alpha1/posts(\\?|$)",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-search-posts",
+    "title": "按关键词搜索文章",
+    "priority": "P2",
+    "feature_id": "search-posts",
+    "preconditions": [
+     "Halo 已启动并初始化管理员（凭据在 .env）"
+    ],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/login"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"用户名\"]",
+      "value": "{{ADMIN_USER}}"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"密码\"]",
+      "value": "{{ADMIN_PASSWORD}}"
+     },
+     {
+      "action": "click",
+      "selector": "role=button[name=\"登录\"]"
+     },
+     {
+      "action": "wait_for",
+      "text": "Administrator"
+     },
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/console/posts"
+     },
+     {
+      "action": "fill",
+      "selector": "role=textbox[name=\"输入关键词搜索\"]",
+      "value": "冒烟"
+     },
+     {
+      "action": "assert_text",
+      "text": "AI 测试 Agent 冒烟文章 001"
+     }
+    ],
+    "expected": [
+     "搜索后列表显示匹配关键词的文章"
+    ]
+   }
+  },
+  {
+   "id": "home-posts",
+   "title": "前台首页文章",
+   "description": "访客打开网站首页，能看到已发布的文章",
+   "priority": "P0",
+   "fault": {
+    "url_regex": "^http://localhost:8090/(\\?.*)?$",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-home-posts",
+    "title": "前台首页文章",
+    "priority": "P0",
+    "feature_id": "home-posts",
+    "preconditions": [],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/"
+     },
+     {
+      "action": "assert_text",
+      "text": "AI 测试 Agent 冒烟文章 001"
+     }
+    ],
+    "expected": [
+     "首页显示已发布文章"
+    ]
+   }
+  },
+  {
+   "id": "archives-page",
+   "title": "前台归档页",
+   "description": "访客打开归档页，能看到按月份归档的文章",
+   "priority": "P2",
+   "fault": {
+    "url_regex": "^http://localhost:8090/archives(\\?.*)?$",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-archives-page",
+    "title": "前台归档页",
+    "priority": "P2",
+    "feature_id": "archives-page",
+    "preconditions": [],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/archives"
+     },
+     {
+      "action": "assert_text",
+      "text": "2026 年 09 月"
+     }
+    ],
+    "expected": [
+     "归档页按月份列出文章（含 2026 年 09 月）"
+    ]
+   }
+  },
+  {
+   "id": "tags-page",
+   "title": "前台标签页",
+   "description": "访客打开标签页，能看到所有标签",
+   "priority": "P2",
+   "fault": {
+    "url_regex": "^http://localhost:8090/tags(\\?.*)?$",
+    "method": "GET",
+    "status": 500
+   },
+   "reference": {
+    "id": "ref-tags-page",
+    "title": "前台标签页",
+    "priority": "P2",
+    "feature_id": "tags-page",
+    "preconditions": [],
+    "steps": [
+     {
+      "action": "goto",
+      "url": "{{BASE_URL}}/tags"
+     },
+     {
+      "action": "assert_text",
+      "text": "所有标签"
+     }
+    ],
+    "expected": [
+     "标签页显示所有标签"
+    ]
+   }
+  }
+ ],
+ "excluded": [
+  {
+   "id": "comment-list",
+   "reason": "接口失败时 Halo 显示与真实空列表完全相同的空状态（只有一闪而过的错误提示），仅凭界面无法区分，不能作为可判定的基准"
+  },
+  {
+   "id": "attachment-list",
+   "reason": "同上：附件库接口失败时显示'当前分组没有附件'"
+  },
+  {
+   "id": "dashboard-stats",
+   "reason": "统计接口失败时统计卡片的标签照常渲染，界面上没有可断言的差异"
+  }
+ ]
+}
