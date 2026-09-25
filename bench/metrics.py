@@ -23,6 +23,13 @@ def _rate(n: int, d: int) -> float | None:
     return round(n / d, 4) if d else None
 
 
+def _wall_seconds(records: list[dict]) -> float:
+    per_round: dict[int, float] = defaultdict(float)
+    for r in records:
+        per_round[r["round"]] = max(per_round[r["round"]], r.get("seconds", 0))
+    return round(sum(per_round.values()), 1)
+
+
 def compute(records: list[dict]) -> dict:
     by_feature: dict[str, list[dict]] = defaultdict(list)
     for r in records:
@@ -107,7 +114,8 @@ def compute(records: list[dict]) -> dict:
             "total_tokens": tokens,
             "tokens_per_run": round(tokens / runs) if runs else None,
             "llm_seconds_total": round(latency / 1000, 1),
-            "wall_seconds_total": round(sum(r.get("seconds", 0) for r in records), 1),
+            # seconds 是"本轮开始 → 该记录落盘"的累计值，同轮记录共享起点：每轮取最大值再求和
+            "wall_seconds_total": _wall_seconds(records),
             "by_phase": dict(phases),
             "llm_calls_failed": sum(r["llm"]["calls_failed"] for r in records),
         },
@@ -139,7 +147,7 @@ def to_markdown(m: dict, meta: dict) -> str:
     lines += [
         "",
         (f"成本：共 {cost['total_tokens']:,} tokens，平均每次运行 {cost['tokens_per_run']:,}；"
-         f"LLM 耗时 {cost['llm_seconds_total']} s，总墙钟 {cost['wall_seconds_total']} s；"
+         f"LLM 调用耗时累计 {cost['llm_seconds_total']} s（并发，非墙钟），总墙钟 {cost['wall_seconds_total']} s；"
          f"失败调用 {cost['llm_calls_failed']} 次。"),
         "",
         "| 功能 | 合法用例 | 覆盖 | informed 各轮 | 故障注入（informed / blind / 断言） |",

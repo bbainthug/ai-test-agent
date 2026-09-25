@@ -1,0 +1,459 @@
+{
+ "runs": 100,
+ "features": 20,
+ "planner_valid_rate": 0.97,
+ "coverage": {
+  "features_covered_at_least_once": 15,
+  "features": 20,
+  "run_coverage_rate": 0.53
+ },
+ "healthy": {
+  "informed": {
+   "covered_runs": 53,
+   "false_alarm_rate": 0.4717,
+   "fail": 18,
+   "unsure": 7,
+   "pass": 28,
+   "false_alarm_rate_all_planned": 0.7113
+  },
+  "blind": {
+   "covered_runs": 53,
+   "false_alarm_rate": 0.7736,
+   "fail": 9,
+   "unsure": 32,
+   "pass": 12,
+   "false_alarm_rate_all_planned": 0.8763
+  },
+  "assert_only": {
+   "covered_runs": 53,
+   "false_alarm_rate": 0.3774,
+   "fail": 20,
+   "unsure": 0,
+   "pass": 33,
+   "false_alarm_rate_all_planned": 0.6186
+  }
+ },
+ "fault": {
+  "informed": {
+   "fault_runs": 10,
+   "miss_rate": 0.0,
+   "fail": 9,
+   "unsure": 1,
+   "pass": 0
+  },
+  "blind": {
+   "fault_runs": 10,
+   "miss_rate": 0.1,
+   "fail": 9,
+   "unsure": 0,
+   "pass": 1
+  },
+  "assert_only": {
+   "fault_runs": 10,
+   "miss_rate": 0.3,
+   "fail": 7,
+   "unsure": 0,
+   "pass": 3
+  }
+ },
+ "consistency": {
+  "informed": {
+   "stable_features": 8,
+   "features": 18,
+   "rate": 0.4444
+  },
+  "blind": {
+   "stable_features": 7,
+   "features": 18,
+   "rate": 0.3889
+  },
+  "assert_only": {
+   "stable_features": 10,
+   "features": 18,
+   "rate": 0.5556
+  }
+ },
+ "cost": {
+  "total_tokens": 1431297,
+  "tokens_per_run": 14313,
+  "llm_seconds_total": 21362.8,
+  "wall_seconds_total": 3601.1,
+  "by_phase": {
+   "plan": {
+    "calls": 108,
+    "total_tokens": 451522
+   },
+   "judge:blind": {
+    "calls": 119,
+    "total_tokens": 482995
+   },
+   "judge": {
+    "calls": 118,
+    "total_tokens": 496780
+   }
+  },
+  "llm_calls_failed": 14
+ },
+ "per_feature": {
+  "about-page": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 5,
+   "informed": [
+    "fail",
+    "pass",
+    "pass",
+    "fail",
+    "fail"
+   ],
+   "fault": {
+    "hit": true,
+    "informed": "fail",
+    "blind": "fail",
+    "assert_only": "fail"
+   }
+  },
+  "archives-page": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 0,
+   "informed": [
+    "unsure",
+    "unsure",
+    "unsure",
+    "unsure",
+    "unsure"
+   ],
+   "fault": {
+    "hit": false,
+    "informed": "unsure",
+    "blind": "fail",
+    "assert_only": "fail"
+   }
+  },
+  "category-list": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 5,
+   "informed": [
+    "pass",
+    "unsure",
+    "pass",
+    "pass",
+    "pass"
+   ],
+   "fault": {
+    "hit": true,
+    "informed": "fail",
+    "blind": "fail",
+    "assert_only": "fail"
+   }
+  },
+  "create-category": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 4,
+   "informed": [
+    "pass",
+    "fail",
+    "fail",
+    "fail",
+    "fail"
+   ],
+   "fault": {
+    "hit": true,
+    "informed": "fail",
+    "blind": "fail",
+    "assert_only": "fail"
+   }
+  },
+  "create-tag": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 1,
+   "informed": [
+    "fail",
+    "fail",
+    "fail",
+    "fail",
+    "fail"
+   ],
+   "fault": {
+    "hit": false,
+    "informed": "fail",
+    "blind": "fail",
+    "assert_only": "fail"
+   }
+  },
+  "home-posts": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 2,
+   "informed": [
+    "unsure",
+    "fail",
+    "unsure",
+    "unsure",
+    "fail"
+   ],
+   "fault": {
+    "hit": false,
+    "informed": "unsure",
+    "blind": "unsure",
+    "assert_only": "fail"
+   }
+  },
+  "login": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 5,
+   "informed": [
+    "pass",
+    "pass",
+    "pass",
+    "pass",
+    "pass"
+   ],
+   "fault": {
+    "hit": true,
+    "informed": "fail",
+    "blind": "fail",
+    "assert_only": "fail"
+   }
+  },
+  "menu-items": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 2,
+   "informed": [
+    "unsure",
+    "fail",
+    "fail",
+    "unsure",
+    "fail"
+   ],
+   "fault": {
+    "hit": false,
+    "informed": "unsure",
+    "blind": "fail",
+    "assert_only": "fail"
+   }
+  },
+  "notification-list": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 4,
+   "informed": [
+    "fail",
+    "fail",
+    "pass",
+    "fail",
+    "pass"
+   ],
+   "fault": {
+    "hit": true,
+    "informed": "fail",
+    "blind": "fail",
+    "assert_only": "fail"
+   }
+  },
+  "page-list": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 0,
+   "informed": [
+    "fail",
+    "fail",
+    "fail",
+    "fail",
+    "fail"
+   ],
+   "fault": {
+    "hit": false,
+    "informed": "fail",
+    "blind": "fail",
+    "assert_only": "fail"
+   }
+  },
+  "plugin-list": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 5,
+   "informed": [
+    "fail",
+    "pass",
+    "unsure",
+    "fail",
+    "unsure"
+   ],
+   "fault": {
+    "hit": true,
+    "informed": "fail",
+    "blind": "fail",
+    "assert_only": "pass"
+   }
+  },
+  "post-detail": {
+   "rounds": 5,
+   "planned": 4,
+   "covered": 0,
+   "informed": [
+    "unsure",
+    "-",
+    "unsure",
+    "unsure",
+    "unsure"
+   ],
+   "fault": {
+    "hit": false,
+    "informed": "unsure",
+    "blind": "unsure",
+    "assert_only": "fail"
+   }
+  },
+  "post-list": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 4,
+   "informed": [
+    "fail",
+    "unsure",
+    "unsure",
+    "fail",
+    "pass"
+   ],
+   "fault": {
+    "hit": true,
+    "informed": "fail",
+    "blind": "fail",
+    "assert_only": "fail"
+   }
+  },
+  "publish-post": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 0,
+   "informed": [
+    "unsure",
+    "unsure",
+    "unsure",
+    "unsure",
+    "unsure"
+   ],
+   "fault": {
+    "hit": false,
+    "informed": "unsure",
+    "blind": "unsure",
+    "assert_only": "fail"
+   }
+  },
+  "role-list": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 0,
+   "informed": [
+    "fail",
+    "fail",
+    "fail",
+    "fail",
+    "fail"
+   ],
+   "fault": {
+    "hit": false,
+    "informed": "fail",
+    "blind": "fail",
+    "assert_only": "pass"
+   }
+  },
+  "search-posts": {
+   "rounds": 5,
+   "planned": 3,
+   "covered": 1,
+   "informed": [
+    "unsure",
+    "-",
+    "fail",
+    "-",
+    "unsure"
+   ],
+   "fault": {
+    "hit": false,
+    "informed": "unsure",
+    "blind": "fail",
+    "assert_only": "fail"
+   }
+  },
+  "site-title": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 5,
+   "informed": [
+    "pass",
+    "pass",
+    "pass",
+    "pass",
+    "pass"
+   ],
+   "fault": {
+    "hit": true,
+    "informed": "unsure",
+    "blind": "pass",
+    "assert_only": "fail"
+   }
+  },
+  "tag-list": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 3,
+   "informed": [
+    "pass",
+    "fail",
+    "fail",
+    "pass",
+    "fail"
+   ],
+   "fault": {
+    "hit": true,
+    "informed": "fail",
+    "blind": "fail",
+    "assert_only": "pass"
+   }
+  },
+  "tags-page": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 2,
+   "informed": [
+    "unsure",
+    "unsure",
+    "unsure",
+    "fail",
+    "unsure"
+   ],
+   "fault": {
+    "hit": false,
+    "informed": "unsure",
+    "blind": "fail",
+    "assert_only": "fail"
+   }
+  },
+  "user-list": {
+   "rounds": 5,
+   "planned": 5,
+   "covered": 5,
+   "informed": [
+    "pass",
+    "pass",
+    "pass",
+    "pass",
+    "pass"
+   ],
+   "fault": {
+    "hit": true,
+    "informed": "fail",
+    "blind": "fail",
+    "assert_only": "pass"
+   }
+  }
+ }
+}

@@ -39,3 +39,9 @@ def test_rates_follow_documented_definitions():
     assert m["consistency"]["informed"] == {"stable_features": 1, "features": 2, "rate": 0.5}
     assert m["cost"]["total_tokens"] == 600
     assert "误报率" in to_markdown(m, {"rounds": 2})
+
+
+def test_wall_seconds_takes_per_round_max_not_sum():
+    recs = [_rec(1, "a"), _rec(1, "b"), _rec(2, "a")]
+    recs[0]["seconds"], recs[1]["seconds"], recs[2]["seconds"] = 100, 250, 80
+    assert compute(recs)["cost"]["wall_seconds_total"] == 330
