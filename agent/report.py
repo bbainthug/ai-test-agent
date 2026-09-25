@@ -10,7 +10,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from .executor import ExecutionResult
@@ -28,7 +28,6 @@ def build_report(
     halo_image: str,
     llm_model: str,
 ) -> dict:
-    steps = exec_result.to_dict()["steps"]
     failure_classes: dict[str, int] = {}
     for s in exec_result.steps:
         if s.status == "failed" and s.failure_class:
@@ -38,7 +37,7 @@ def build_report(
 
     return {
         "run_id": run_id,
-        "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "created_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "target": {
             "app": "halo",
             "version": halo_image,

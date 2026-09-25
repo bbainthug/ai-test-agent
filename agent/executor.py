@@ -20,21 +20,19 @@
 
 from __future__ import annotations
 
-from __future__ import annotations
-
 import fnmatch
 import re
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from playwright.sync_api import Error as PWError
-from playwright.sync_api import Locator, Page, TimeoutError as PWTimeoutError
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import Locator, Page, sync_playwright
+from playwright.sync_api import TimeoutError as PWTimeoutError
 
 from .config import Settings
-from .schema import ASSERT_ACTIONS, Case, Step
+from .schema import Case, Step
 from .snapshot import numbered, redact, text_snapshot
 
 FAILURE_CLASSES = ("locator_failed", "timeout", "assert_failed")
@@ -78,6 +76,26 @@ class StepResult:
         }
 
 
+@dataclass(frozen=True)
+class Fault:
+    """故障注入：让匹配 url_regex 的请求直接返回 status（默认 500），模拟"该功能坏了"。
+
+    用于基准测试的漏报率：同一条用例在健康系统上应判 pass，在注入故障后不应判 pass。
+    只在测试进程内生效（Playwright 路由拦截），不改动被测系统本身。
+    """
+
+    url_regex: str
+    status: int = 500
+    method: str | None = None  # None = 任意方法；否则只拦截该方法（如 "PUT"）
+
+    def to_dict(self) -> dict:
+        return {"url_regex": self.url_regex, "status": self.status, "method": self.method}
+
+
+# 只记录被测应用自身的接口调用（不记静态资源），用于判断用例是否真的"碰到"了目标功能
+_API_PATH_RE = re.compile(r"^https?://[^/]+(/(?:apis|api|actuator)/[^?#]*)")
+
+
 @dataclass
 class ExecutionResult:
     case_id: str
@@ -87,6 +105,9 @@ class ExecutionResult:
     steps: list[StepResult] = field(default_factory=list)
     final_snapshot_numbered: str = ""
     notes: list[str] = field(default_factory=list)
+    api_calls: dict[str, int] = field(default_factory=dict)  # "METHOD /path" -> 次数
+    faults: list[Fault] = field(default_factory=list)
+    faults_hit: int = 0  # 故障被实际触发的次数（0 表示用例没碰到被注入故障的功能）
 
     def to_dict(self) -> dict:
         return {
@@ -97,6 +118,9 @@ class ExecutionResult:
             "steps": [s.to_dict() for s in self.steps],
             "final_snapshot_numbered": self.final_snapshot_numbered,
             "notes": self.notes,
+            "api_calls": self.api_calls,
+            "faults": [f.to_dict() for f in self.faults],
+            "faults_hit": self.faults_hit,
         }
 
     @property
@@ -122,7 +146,7 @@ def render_template(value: str, variables: dict[str, str]) -> str:
     return _TEMPLATE_RE.sub(sub, value)
 
 
-def _resolve_single(scope: "Page | Locator", expr: str) -> tuple[Locator, str]:
+def _resolve_single(scope: Page | Locator, expr: str) -> tuple[Locator, str]:
     """在一个作用域（page 或 locator）上解析单个选择器表达式。"""
     m = _ROLE_RE.match(expr)
     if m:
@@ -158,8 +182,11 @@ def resolve_locator(page: Page, selector: str) -> tuple[Locator, str]:
 
 
 class Executor:
-    def __init__(self, settings: Settings, run_dir: Path) -> None:
+    def __init__(
+        self, settings: Settings, run_dir: Path, faults: list[Fault] | None = None
+    ) -> None:
         self.settings = settings
+        self.faults = list(faults or [])
         self.run_dir = Path(run_dir)
         self.shots_dir = self.run_dir / "shots"
         self.shots_dir.mkdir(parents=True, exist_ok=True)
@@ -171,7 +198,7 @@ class Executor:
         的 new-headless 模式。"""
         try:
             return playwright.chromium.launch(headless=headless)
-        except Exception as exc:  # noqa: BLE001 —— 仅对可执行文件缺失做回退
+        except Exception as exc:
             if "Executable doesn't exist" in str(exc) and "headless" in str(exc):
                 return playwright.chromium.launch(headless=headless, channel="chromium")
             raise
@@ -194,10 +221,35 @@ class Executor:
         )
         context.route(pattern, lambda route: route.abort())
 
+    def _install_faults(self, context, result: ExecutionResult) -> None:
+        for fault in self.faults:
+            pattern = re.compile(fault.url_regex)
+
+            def handler(route, request, fault=fault):
+                if fault.method and request.method.upper() != fault.method.upper():
+                    return route.continue_()
+                result.faults_hit += 1
+                return route.fulfill(
+                    status=fault.status,
+                    content_type="application/json",
+                    body=f'{{"title":"Injected fault","status":{fault.status}}}',
+                )
+
+            context.route(pattern, handler)
+
+    @staticmethod
+    def _record_api(result: ExecutionResult, request) -> None:
+        m = _API_PATH_RE.match(request.url)
+        if not m:
+            return
+        key = f"{request.method} {m.group(1)}"
+        result.api_calls[key] = result.api_calls.get(key, 0) + 1
+
     def run_case(self, case: Case) -> ExecutionResult:
-        started = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        started = datetime.now(UTC).isoformat(timespec="seconds")
         result = ExecutionResult(
-            case_id=case.id, started_at=started, finished_at=started, final_url=""
+            case_id=case.id, started_at=started, finished_at=started, final_url="",
+            faults=list(self.faults),
         )
         variables = self.settings.template_vars()
 
@@ -205,6 +257,8 @@ class Executor:
             browser = self._launch(p, self.settings.headless)
             context = browser.new_context(viewport={"width": 1440, "height": 900}, locale="zh-CN")
             self._block_external(context)
+            self._install_faults(context, result)
+            context.on("request", lambda req: self._record_api(result, req))
             page = context.new_page()
             try:
                 for idx, step in enumerate(case.steps, start=1):
@@ -232,7 +286,7 @@ class Executor:
                 context.close()
                 browser.close()
 
-        result.finished_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        result.finished_at = datetime.now(UTC).isoformat(timespec="seconds")
         return result
 
     # ------------------------------------------------------------------ #

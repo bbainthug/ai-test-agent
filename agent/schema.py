@@ -58,7 +58,7 @@ class Step(BaseModel):
     timeout_ms: int | None = None
 
     @model_validator(mode="after")
-    def _check_required_params(self) -> "Step":
+    def _check_required_params(self) -> Step:
         a = self.action
         if a == "goto" and not self.url:
             raise ValueError("goto 需要参数 url")

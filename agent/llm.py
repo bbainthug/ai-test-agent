@@ -15,7 +15,7 @@ import json
 import re
 import time
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from openai import OpenAI
@@ -109,11 +109,11 @@ class LLMClient:
             t0 = time.monotonic()
             try:
                 resp = self._client.chat.completions.create(**kwargs)
-            except Exception as exc:  # noqa: BLE001 —— 网络/SDK 异常统一记账后上抛
+            except Exception as exc:
                 last_error = exc
                 self._log(
                     CallRecord(
-                        ts=datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                        ts=datetime.now(UTC).isoformat(timespec="seconds"),
                         run_id=self.run_id,
                         phase=phase,
                         model=self.model,
@@ -141,7 +141,7 @@ class LLMClient:
             usage = getattr(resp, "usage", None)
             self._log(
                 CallRecord(
-                    ts=datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                    ts=datetime.now(UTC).isoformat(timespec="seconds"),
                     run_id=self.run_id,
                     phase=phase,
                     model=self.model,

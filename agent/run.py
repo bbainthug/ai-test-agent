@@ -13,13 +13,12 @@ from __future__ import annotations
 import argparse
 import json
 import re
-import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from .config import ConfigError, Settings, load_settings
 from .executor import Executor
-from .judge import judge_execution
+from .judge import JUDGE_MODES, assert_only_verdict, judge_execution
 from .llm import LLMClient
 from .report import build_report, write_report
 from .schema import Case
@@ -30,7 +29,7 @@ def _slug(text: str) -> str:
 
 
 def make_run_id(case: Case) -> str:
-    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    ts = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     return f"{ts}-{_slug(case.id)}"
 
 
@@ -39,6 +38,7 @@ def run_case_file(
     settings: Settings,
     *,
     skip_judge: bool = False,
+    judge_mode: str = "informed",
     reports_dir: Path = Path("reports"),
     runs_dir: Path = Path("runs"),
 ) -> dict:
@@ -63,16 +63,10 @@ def run_case_file(
             temperature=settings.llm_temperature,
             timeout_s=settings.llm_timeout_s,
         )
-        judge_result = judge_execution(client, case, exec_result)
+        judge_result = judge_execution(client, case, exec_result, mode=judge_mode)
     else:
-        # 消融口径：纯断言，无 LLM 裁判。结论由步骤结果机械推导：
-        # 有失败步骤 -> fail；否则 pass；不存在 unsure。
-        judge_result = {
-            "verdict": "fail" if exec_result.failed_step else "pass",
-            "reason": "ablation: no LLM judge, verdict derived from step results only",
-            "evidence": [],
-            "parsed": True,
-        }
+        # 消融口径：纯断言，无 LLM 裁判
+        judge_result = assert_only_verdict(exec_result)
 
     report = build_report(
         run_id=run_id,
@@ -83,7 +77,7 @@ def run_case_file(
         halo_image=settings.halo_image,
         llm_model=settings.llm_model if not skip_judge else "none",
     )
-    json_path, md_path = write_report(report, reports_dir)
+    write_report(report, reports_dir)
     return report
 
 
@@ -91,6 +85,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m agent.run", description=__doc__)
     parser.add_argument("--case", required=True, help="用例 JSON 路径")
     parser.add_argument("--skip-judge", action="store_true", help="关闭 LLM 裁判（纯断言消融口径）")
+    parser.add_argument(
+        "--judge-mode", choices=JUDGE_MODES, default="informed",
+        help="informed=裁判能看到步骤结果（默认）；blind=只看 expected 与最终快照",
+    )
     parser.add_argument("--reports-dir", default="reports")
     parser.add_argument("--runs-dir", default="runs")
     args = parser.parse_args(argv)
@@ -105,6 +103,7 @@ def main(argv: list[str] | None = None) -> int:
         Path(args.case),
         settings,
         skip_judge=args.skip_judge,
+        judge_mode=args.judge_mode,
         reports_dir=Path(args.reports_dir),
         runs_dir=Path(args.runs_dir),
     )

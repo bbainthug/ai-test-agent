@@ -118,7 +118,6 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     from .config import load_settings
-    from .llm import LLMError
 
     settings = load_settings()
     settings.require_llm_config()
@@ -143,6 +142,6 @@ def main(argv: list[str] | None = None) -> int:
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
-    except (PlannerError, LLMError) as exc:  # noqa: F821 —— 延迟导入的 LLMError
+    except (PlannerError, LLMError) as exc:
         print(f"[planner] 失败: {exc}")
         raise SystemExit(2)

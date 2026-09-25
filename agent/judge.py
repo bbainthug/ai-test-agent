@@ -37,6 +37,28 @@ JUDGE_SYSTEM_PROMPT = """你是严格的 e2e 测试执行裁判，判定一条�
 {"verdict": "pass|fail|unsure", "reason": "一句话理由", "evidence": [{"expected_index": 0, "snapshot_line": 12, "quote": "..."}]}
 """
 
+BLIND_JUDGE_SYSTEM_PROMPT = """你是严格的 e2e 测试结果裁判，判定一个功能在真实系统上是否表现符合预期。
+
+你只能看到两样东西：
+1. 预期结果列表（expected）
+2. 操作结束后最终页面的文本快照（带 L 行号，来自页面可访问性树）
+
+你看不到任何步骤的执行结果，也看不到断言是否通过——只能根据最终页面自己判断。
+
+判定规则（三态，不许二分）：
+- pass：每一条 expected 都能在最终快照里找到明确支持的证据。
+- fail：快照里有与 expected 明确矛盾的证据（错误提示、失败提示、页面显示了与预期相反的内容、应出现的内容明确没有出现且页面已正常加载）。
+- unsure：快照里找不到判断所需的信息且没有明确反证，或页面看起来没有加载完成、停留在无关页面。
+
+其他要求：
+- 只依据快照文本判定，禁止想象页面内容，禁止用常识推测系统"应该"做了什么。
+- evidence 里每条证据必须给出 snapshot_line（最终快照的行号）和 quote（该行原文摘录）。
+- 输出只能是 JSON 对象：
+{"verdict": "pass|fail|unsure", "reason": "一句话理由", "evidence": [{"expected_index": 0, "snapshot_line": 12, "quote": "..."}]}
+"""
+
+JUDGE_MODES = ("informed", "blind")
+
 VALID_VERDICTS = ("pass", "fail", "unsure")
 
 
@@ -45,8 +67,18 @@ def judge_execution(
     case: Case,
     exec_result: ExecutionResult,
     max_snapshot_lines: int = 400,
+    mode: str = "informed",
 ) -> dict:
-    """裁判一次执行。返回 {verdict, reason, evidence, parsed}。"""
+    """裁判一次执行。返回 {verdict, reason, evidence, parsed, mode}。
+
+    mode:
+    - informed：能看到每一步的执行结果（默认，阶段 A 口径）；
+    - blind：只看 expected + 最终快照，看不到步骤是否通过——用于衡量裁判是否只是在复述断言结果。
+    """
+    if mode not in JUDGE_MODES:
+        raise ValueError(f"未知裁判模式 {mode!r}，可选 {JUDGE_MODES}")
+    if mode == "blind":
+        return _judge_blind(client, case, exec_result, max_snapshot_lines)
     steps_desc = []
     for s in exec_result.steps:
         line = f"步骤{s.index} [{s.action}] {json.dumps(s.params, ensure_ascii=False)} -> {s.status}"
@@ -77,14 +109,40 @@ title: {case.title}
         trimmed = lines[:keep_head] + ["… [快照过长已截断]"] + lines[-max_snapshot_lines:]
         user_prompt = "\n".join(trimmed)
 
+    return _ask_judge(client, JUDGE_SYSTEM_PROMPT, user_prompt, phase="judge", mode="informed")
+
+
+def _judge_blind(
+    client: LLMClient, case: Case, exec_result: ExecutionResult, max_snapshot_lines: int
+) -> dict:
+    user_prompt = f"""# 功能
+{case.title}
+
+# expected
+{chr(10).join(f"{i}. {e}" for i, e in enumerate(case.expected))}
+
+# 最终页面文本快照（含行号）
+{exec_result.final_snapshot_numbered or "(最终快照为空)"}
+
+请按系统提示的三态规则输出 JSON 判定。"""
+    lines = user_prompt.splitlines()
+    if len(lines) > max_snapshot_lines + 20:
+        user_prompt = "\n".join(lines[:12] + ["… [快照过长已截断]"] + lines[-max_snapshot_lines:])
+    return _ask_judge(
+        client, BLIND_JUDGE_SYSTEM_PROMPT, user_prompt, phase="judge:blind", mode="blind"
+    )
+
+
+def _ask_judge(client: LLMClient, system: str, user_prompt: str, *, phase: str, mode: str) -> dict:
     fallback = {
         "verdict": "unsure",
         "reason": "裁判输出不可解析，降级为 unsure（不允许默认 pass）",
         "evidence": [],
         "parsed": False,
+        "mode": mode,
     }
     try:
-        raw = client.chat_json(phase="judge", system=JUDGE_SYSTEM_PROMPT, user=user_prompt)
+        raw = client.chat_json(phase=phase, system=system, user=user_prompt)
     except Exception as exc:  # noqa: BLE001 —— 任何 LLM 故障都降级为 unsure
         fallback["reason"] = f"裁判调用失败: {exc}"
         return fallback
@@ -112,4 +170,16 @@ title: {case.title}
         "reason": str(raw.get("reason", ""))[:500],
         "evidence": cleaned_evidence,
         "parsed": True,
+        "mode": mode,
+    }
+
+
+def assert_only_verdict(exec_result: ExecutionResult) -> dict:
+    """消融口径：不用 LLM，结论只由步骤结果机械推导（有失败步骤 -> fail，否则 pass，无 unsure）。"""
+    return {
+        "verdict": "fail" if exec_result.failed_step else "pass",
+        "reason": "ablation: no LLM judge, verdict derived from step results only",
+        "evidence": [],
+        "parsed": True,
+        "mode": "assert_only",
     }
