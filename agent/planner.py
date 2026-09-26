@@ -363,20 +363,31 @@ def plan_case(
     if mode == "grounded" and explorer is not None:
         import time
 
-        explore_t0 = time.monotonic()
+        explore_seconds = 0.0  # 只累加下面 3 个 explorer 调用本身的墙钟，不含 LLM 往返
         try:
+            t = time.monotonic()
             site_map_text = explorer.site_map_text()
+            explore_seconds += time.monotonic() - t
+
             selection = _select_page(
                 client, feature_desc=feature_desc, site_map_text=site_map_text
             )
             url = selection["url"]
+
+            t = time.monotonic()
             snapshot = explorer.page_snapshot(url)
+            explore_seconds += time.monotonic() - t
+
             expand_click = selection.get("expand_click") or None
             if expand_click:
+                t = time.monotonic()
                 try:
-                    snapshot = explorer.expanded_snapshot(url, expand_click) + "\n" + snapshot
+                    expanded = explorer.expanded_snapshot(url, expand_click)
+                    snapshot = expanded + "\n" + snapshot
                 except Exception as exc:  # noqa: BLE001 —— 展开失败不阻断，退回基础快照
                     g["expand_note"] = f"一层展开失败，退回基础快照: {exc}"
+                finally:
+                    explore_seconds += time.monotonic() - t
             case = _write_case_with_snapshot(
                 client, feature_desc=feature_desc, feature_id=feature_id,
                 snapshot=snapshot, site_map_note=site_map_text[:2000], max_rounds=max_rounds,
@@ -409,7 +420,7 @@ def plan_case(
             g.update({
                 "status": "ok", "mode": "grounded", "page_url": url,
                 "expand_click": expand_click,
-                "explore_seconds": round(time.monotonic() - explore_t0, 2),
+                "explore_seconds": round(explore_seconds, 2),
             })
             return case
         except PlannerError:
@@ -418,7 +429,10 @@ def plan_case(
             g.update({
                 "status": "fallback", "mode": "baseline", "page_url": None,
                 "expand_click": None, "violations": [],
-                "explore_seconds": round(time.monotonic() - explore_t0, 2),
+                # 失败可能发生在 explorer 调用内部（已累计部分）或 LLM 选页调用里
+                # （explore_seconds 仍是 0）；不用"距 explore_t0 的墙钟"，那会把
+                # LLM 选页/写用例的等待也算进探索耗时。
+                "explore_seconds": round(explore_seconds, 2),
                 "reason": f"grounded 规划失败，降级 baseline: {str(exc)[:200]}",
             })
             return _plan_baseline(client, feature_desc=feature_desc,

@@ -5,6 +5,12 @@
 .runtime/
 runs/
 
+# B2 grounded planner：Explorer 缓存目录——storage_state.json 是活的登录
+# session cookie（等同凭据，不能进仓库）；site_map.json 是可重新探索出来的
+# 派生数据，跟它放一起免得单独摘出来。bench/results/**/runs.jsonl 里的
+# grounding 字段已经带了 page_url/explore_seconds，不依赖这份缓存。
+bench/results/*/explorer/
+
 # Python
 __pycache__/
 *.py[cod]

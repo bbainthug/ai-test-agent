@@ -1,0 +1,29 @@
+{
+ "started_at": "20260926T022509Z",
+ "rounds": 5,
+ "features": [
+  "login",
+  "notification-list",
+  "post-list",
+  "publish-post",
+  "site-title",
+  "category-list",
+  "create-category",
+  "tag-list",
+  "create-tag",
+  "page-list",
+  "post-detail",
+  "about-page",
+  "menu-items",
+  "plugin-list",
+  "user-list",
+  "role-list",
+  "search-posts",
+  "home-posts",
+  "archives-page",
+  "tags-page"
+ ],
+ "model": "glm-5.3-flash",
+ "halo_image": "registry.fit2cloud.com/halo/halo:2.20",
+ "planner": "grounded"
+}
