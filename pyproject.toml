@@ -17,3 +17,6 @@ dev = ["pytest>=8", "ruff>=0.6"]
 testpaths = ["tests"]
 pythonpath = [".", "tests"]
 addopts = "-q"
+markers = [
+    "halo: 需要本地 Halo 跑起来才能过（默认跳过，见 test_explorer_halo_integration.py）",
+]

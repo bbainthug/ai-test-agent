@@ -71,6 +71,8 @@ def main(argv=None) -> int:
     ap.add_argument("--out-dir", default="")
     ap.add_argument("--resume", action="store_true", help="跳过 runs.jsonl 里已有的 (round, feature)")
     ap.add_argument("--workers", type=int, default=6, help="并发的 LLM 调用数（planner 与裁判）")
+    ap.add_argument("--planner", default="grounded", choices=("baseline", "grounded"),
+                    help="baseline=旧版凭系统事实生成；grounded=先探索真实页面再生成（B2）")
     args = ap.parse_args(argv)
     settings = load_settings()
     settings.require_llm_config()
@@ -88,7 +90,17 @@ def main(argv=None) -> int:
     (out_dir / "meta.json").write_text(json.dumps({
         "started_at": stamp, "rounds": args.rounds, "features": [f.id for f in features],
         "model": settings.llm_model, "halo_image": settings.halo_image,
+        "planner": args.planner,
     }, ensure_ascii=False, indent=1), encoding="utf-8")
+
+    # 主线程建一个 Explorer，6 个规划线程共用（Explorer.site_map() 内部加锁，
+    # 保证并发调用只探索一次；每次方法调用各自开关浏览器，不跨线程共享
+    # Playwright 对象，见 agent/explorer.py 的类注释）。
+    explorer = None
+    if args.planner == "grounded":
+        from agent.explorer import Explorer
+
+        explorer = Explorer(settings, out_dir / "explorer")
 
     pool = ThreadPoolExecutor(max_workers=args.workers)
     judge_pool = ThreadPoolExecutor(max_workers=args.workers)  # 与外层分开，避免嵌套提交死锁
@@ -96,18 +108,21 @@ def main(argv=None) -> int:
         todo = [f for f in features if (rnd, f.id) not in done]
         if not todo:
             continue
-        # 1) 本轮全部功能并发生成用例（LLM 是瓶颈）
+        # 1) 本轮全部功能并发生成用例（LLM 是瓶颈；grounded 时探索在本线程内做）
         ctx = {}
         for f in todo:
             run_dir = Path("runs") / f"{stamp}-bench" / f"r{rnd}" / f.id
             run_dir.mkdir(parents=True, exist_ok=True)
             client = _client(settings, run_dir)
-            ctx[f.id] = (run_dir, client, time.time(),
-                         pool.submit(plan_case, client, feature_desc=f.description, feature_id=f.id))
+            grounding: dict = {}
+            ctx[f.id] = (run_dir, client, time.time(), grounding,
+                         pool.submit(plan_case, client, feature_desc=f.description,
+                                     feature_id=f.id, mode=args.planner,
+                                     explorer=explorer, grounding=grounding))
         # 2) 按顺序执行（受 Halo 登录限流约束），每条执行完就把裁判丢进线程池
         pending = []
         for f in todo:
-            run_dir, client, t0, fut = ctx[f.id]
+            run_dir, client, t0, grounding, fut = ctx[f.id]
             rec = {"round": rnd, "feature": f.id, "priority": f.priority}
             try:
                 case = fut.result()
@@ -117,6 +132,7 @@ def main(argv=None) -> int:
                 rec["planner"] = "failed"
                 rec["planner_error"] = str(exc)[:300]
                 case = None
+            rec["grounding"] = grounding
             jobs = {}
             if case is not None:
                 healthy = execute(settings, case, run_dir / "healthy", probes=[f.fault])
