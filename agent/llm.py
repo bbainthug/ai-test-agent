@@ -49,6 +49,18 @@ class CallRecord:
 _LOG_LOCK = threading.Lock()
 
 
+# 免费档/低配额网关经常只允许极低并发，429 限速时退避重发；余额不足同样是 429，不重试
+RATE_LIMIT_BACKOFF_S: tuple[float, ...] = (5.0, 15.0, 30.0, 60.0)
+_QUOTA_MARKERS = ("余额", "资源包", "insufficient", "quota", "1113")
+
+
+def _is_rate_limited(exc: Exception) -> bool:
+    if getattr(exc, "status_code", None) != 429:
+        return False
+    text = str(exc).lower()
+    return not any(m.lower() in text for m in _QUOTA_MARKERS)
+
+
 class LLMClient:
     def __init__(
         self,
@@ -103,6 +115,7 @@ class LLMClient:
         prompt_hash = self._prompt_hash(system, user)
 
         attempt = 1
+        rate_limit_waits = 0
         last_error: Exception | None = None
         while attempt <= 2:
             use_json = json_mode and attempt == 1
@@ -136,8 +149,13 @@ class LLMClient:
                         error=type(exc).__name__ + ": " + str(exc)[:300],
                     )
                 )
-                # json 模式不被网关支持时降级重试一次；其余错误直接抛
-                if json_mode and attempt == 1:
+                # 限速（429 且不是余额/额度不足）：按退避表等待后原样重发，每次都已记账
+                if _is_rate_limited(exc) and rate_limit_waits < len(RATE_LIMIT_BACKOFF_S):
+                    time.sleep(RATE_LIMIT_BACKOFF_S[rate_limit_waits])
+                    rate_limit_waits += 1
+                    continue
+                # json 模式不被网关支持时降级重试一次；429（限速重试用尽/余额不足）与其余错误直接抛
+                if json_mode and attempt == 1 and getattr(exc, "status_code", None) != 429:
                     attempt += 1
                     continue
                 raise LLMError(f"LLM 调用失败（phase={phase}）: {exc}") from exc

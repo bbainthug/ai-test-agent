@@ -152,12 +152,20 @@ def _caption_lines_feature() -> list[tuple[str, tuple[int, int, int], int]]:
     ]
 
 
+_GROUNDING: dict = {}
+
+
+def _planner_mode_label() -> str:
+    # plan_case 把实际走的路径写进 grounding；探索失败降级时如实标注，不写死 "grounded"
+    return "grounded：先探索真实页面" if _GROUNDING.get("status") == "ok" else "未探索页面（降级）"
+
+
 def _caption_lines_planner(report: dict) -> list[tuple[str, tuple[int, int, int], int]]:
     case = report["case"]
     steps = case["steps"]
     lines: list[tuple[str, tuple[int, int, int], int]] = [
         (f"planner 生成用例：{case['title']}", CAPTION_FG, 34),
-        (f"共 {len(steps)} 步（grounded：先探索真实页面再写用例）", CAPTION_FG, 26),
+        (f"共 {len(steps)} 步 · {_planner_mode_label()} · 模型 {report['llm']['model']}", CAPTION_FG, 26),
         ("", CAPTION_FG, 10),
     ]
     for i, step in enumerate(steps[:6], start=1):
@@ -359,9 +367,9 @@ def main() -> int:
         feature_desc=FEATURE_DESC,
         feature_id=FEATURE_ID,
         explorer=explorer,
-        grounding={},
+        grounding=_GROUNDING,
     )
-    print(f"[demo] 用例已生成: {case.id}（{len(case.steps)} 步）")
+    print(f"[demo] 用例已生成: {case.id}（{len(case.steps)} 步），grounding={_GROUNDING.get("status")}")
 
     healthy_id, healthy_report_path = _run_and_report(settings, client, case, label="健康系统")
     fault_id, fault_report_path = _run_and_report(settings, client, case, faults=[FAULT], label="故障注入")
