@@ -127,6 +127,9 @@ class LLMClient:
             t0 = time.monotonic()
             try:
                 resp = self._client.chat.completions.create(**kwargs)
+                if not getattr(resp, "choices", None):
+                    # 部分网关在出错时仍返回 200、但没有 choices：按失败调用记账，不让上层撞 TypeError
+                    raise RuntimeError("响应缺少 choices（网关返回了空结果或错误体）")
             except Exception as exc:
                 last_error = exc
                 self._log(

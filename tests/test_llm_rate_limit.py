@@ -63,3 +63,11 @@ def test_rate_limit_gives_up_after_backoff_table(tmp_path, monkeypatch):
     with pytest.raises(LLMError):
         c.chat(phase="p", system="s", user="u")
     assert len(_calls(tmp_path)) == n
+
+
+def test_response_without_choices_is_a_logged_failure(tmp_path, monkeypatch):
+    empty = SimpleNamespace(choices=None, usage=None)
+    c = _client(tmp_path, [empty, empty], monkeypatch)
+    with pytest.raises(LLMError):
+        c.chat_json(phase="p", system="s", user="u")
+    assert [r["ok"] for r in _calls(tmp_path)] == [False, False]
