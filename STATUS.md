@@ -28,7 +28,7 @@ Playwright 执行 → LLM 裁判（pass / fail / unsure）→ 报告。公开仓
 
 ## 下一步
 
-- **重录演示 GIF**：当前 GIF 画面与字幕来自两次不同运行（`ab6ded18` vs `3969d8e9`）。火山额度 2026-09-29 重置，
+- **重录演示 GIF**：当前 GIF 画面与字幕来自两次不同运行（`ab6ded18` vs `3969d8e9`）。火山额度 **2026-09-29 23:59:59（北京时间）** 才重置（29 日白天仍报 AccountQuotaExceeded），30 日起
   跑 `uv run python scripts/record_demo.py`，抽帧检查后提交推送。智谱免费 flash 和魔搭 GLM-5.2 都试过，录不成。
 - **已知漏洞（未修）**：planner 静态校验不拦截非规定语法的选择器（如 `textbox "用户名"`）。
   修了属于 planner 逻辑变更，需重跑基准才能与现有数字对比——适合作为用户亲手完成的练习。
