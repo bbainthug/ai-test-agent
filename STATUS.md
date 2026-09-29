@@ -32,6 +32,10 @@ Playwright 执行 → LLM 裁判（pass / fail / unsure）→ 报告。公开仓
   跑 `uv run python scripts/record_demo.py`，抽帧检查后提交推送。智谱免费 flash 和魔搭 GLM-5.2 都试过，录不成。
 - **已知漏洞（未修）**：planner 静态校验不拦截非规定语法的选择器（如 `textbox "用户名"`）。
   修了属于 planner 逻辑变更，需重跑基准才能与现有数字对比——适合作为用户亲手完成的练习。
+- **基准口径问题（未修）**：`bench/features.json` 里 `search-posts` 与 `post-list` 的故障点/探针正则完全相同
+  （`/v1alpha1/posts(\?|$)`），打开文章列表页就算"覆盖"，搜索是否真的执行无法证明。B2 中 search-posts 覆盖 5/5
+  因此可能偏乐观，整体按运行覆盖率 90% 最多高估约 5 个百分点。修法：探针要求带关键词参数；改了需重跑两组基准才可比。
+  面试被问到覆盖率时应主动说明。（2026-09-29 由面试题库整理时读代码发现）
 - 选页校验漏洞、同名按钮歧义（`>>` 链式选择器）——见 `docs/design.md` 局限一节。
 - `bench/features.json` 的 20 条参考用例由 agent 起草、已对真实 Halo 自动校验，**待用户人工复核**。
 - Halo issue 草稿 `docs/issues/halo-empty-state-on-api-error.md`（2.26.1 已复现、无重复）：是否提交由用户决定。
