@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4          # 把代码拉到这台机器上
+
+      - uses: astral-sh/setup-uv@v5        # 装 uv
+        with:
+          python-version: "3.12"
+
+      - name: 安装依赖
+        run: uv sync
+
+      - name: 代码规范检查
+        run: uv run ruff check .
+
+      - name: 运行测试
+        run: uv run pytest
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0                   # 拉全部历史，才能扫描每一个提交
+
+      - name: 扫描密钥泄露
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
