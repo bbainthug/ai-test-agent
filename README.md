@@ -1,4 +1,6 @@
-# ai-test-agent
+# Assay
+
+> 原名 ai-test-agent（2026-10-02 改名，旧链接自动跳转）。
 
 用 LLM Agent 对真实开源系统 **Halo**（halo-dev/halo，开源建站系统）做端到端测试的闭环工具：
 一句话功能描述进去，浏览器里真跑一遍、LLM 裁判给结论、报告带成本审计出来。

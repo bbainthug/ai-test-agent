@@ -1,5 +1,5 @@
 [project]
-name = "ai-test-agent"
+name = "assay"
 version = "0.1.0"
 description = "LLM-driven e2e test agent against a real open-source app (Halo): planner -> executor -> judge -> report"
 requires-python = ">=3.12"

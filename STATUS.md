@@ -1,14 +1,14 @@
-# ai-test-agent 现状
+# Assay（原 ai-test-agent）现状
 
 > 项目当前状态的唯一可信来源。开始工作前先读；每次任务结束时更新。
 > 结果与过程细节见 `README.md`、`docs/results.md`、`docs/design.md`；任务书在 `docs/tasks/`。
 
-最后更新：2026-09-29
+最后更新：2026-10-02（仓库改名 ai-test-agent → assay；本地目录名未改）
 
 ## 一句话
 
 用 LLM Agent 对开源建站系统 Halo 做端到端测试：一句话功能描述 → planner 生成受限动作用例 →
-Playwright 执行 → LLM 裁判（pass / fail / unsure）→ 报告。公开仓库：github.com/bbainthug/ai-test-agent。
+Playwright 执行 → LLM 裁判（pass / fail / unsure）→ 报告。公开仓库：github.com/bbainthug/assay。
 
 ## 已完成
 
